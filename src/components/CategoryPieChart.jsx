@@ -96,7 +96,7 @@ const CategoryPieChart = () => {
     };
 
     return (
-        <div>
+        <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)', padding: '20px' }}>
             {chartData.labels.length > 0 ? (
                 <div style={{ width: '300px', height: '300px', margin: '0 auto' }}>
                     <Pie data={chartData} options={{
