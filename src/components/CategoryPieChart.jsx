@@ -135,21 +135,25 @@ const CategoryPieChart = () => {
                 </div>
             )}
 
-            <div>
-                <label htmlFor="month">Month:</label>
-                <select id="month" value={selectedMonth} onChange={handleMonthChange} style={selectStyle} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-                    {[...Array(12).keys()].map((month) => (
-                        <option key={month + 1} value={month + 1}>{month + 1}</option>
-                    ))}
-                </select>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', marginTop: '20px' }}>
+                <div>
+                    <label htmlFor="month">Month:</label>
+                    <select id="month" value={selectedMonth} onChange={handleMonthChange} style={selectStyle} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+                        {[...Array(12).keys()].map((month) => (
+                            <option key={month + 1} value={month + 1}>{month + 1}</option>
+                        ))}
+                    </select>
+                </div>
 
-                <label htmlFor="year">Year:</label>
-                <select id="year" value={selectedYear} onChange={handleYearChange} style={selectStyle} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
-                    {[...Array(10).keys()].map((yearOffset) => {
-                        const year = new Date().getFullYear() - yearOffset;
-                        return <option key={year} value={year}>{year}</option>;
-                    })}
-                </select>
+                <div>
+                    <label htmlFor="year">Year:</label>
+                    <select id="year" value={selectedYear} onChange={handleYearChange} style={selectStyle} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+                        {[...Array(10).keys()].map((yearOffset) => {
+                            const year = new Date().getFullYear() - yearOffset;
+                            return <option key={year} value={year}>{year}</option>;
+                        })}
+                    </select>
+                </div>
             </div>
         </div>
     );

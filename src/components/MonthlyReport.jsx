@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
-import { Box, Typography, Select, MenuItem, Card, CardContent, Button } from '@mui/material';
+import { Box, Typography, Select, MenuItem, Card, CardContent, Button, TextField } from '@mui/material';
+import Fuse from 'fuse.js';
 
 const categoryColors = {
     Food: '#FFEBEE',
@@ -17,6 +18,8 @@ const MonthlyReport = () => {
     const [reportData, setReportData] = useState([]);
     const [totalSum, setTotalSum] = useState(0);
     const [categoryCounts, setCategoryCounts] = useState({});
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredData, setFilteredData] = useState([]);
 
     const handleMonthChange = (event) => {
         setSelectedMonth(parseInt(event.target.value));
@@ -43,6 +46,15 @@ const MonthlyReport = () => {
 
         fetchReportData();
     }, [selectedMonth, selectedYear]);
+
+    useEffect(() => {
+        const fuse = new Fuse(reportData, {
+            keys: ['category', 'description', 'date'],
+            threshold: 0.3
+        });
+        const filteredData = searchTerm ? fuse.search(searchTerm).map(result => result.item) : reportData;
+        setFilteredData(filteredData);
+    }, [reportData, searchTerm]);
 
     const totalExpenses = reportData.length;
     const averageExpense = totalExpenses > 0 ? (totalSum / totalExpenses).toFixed(2) : 0;
@@ -89,9 +101,17 @@ const MonthlyReport = () => {
                     })}
                 </Select>
             </Box>
-            {reportData.length > 0 ? (
+            <TextField
+                label="Search"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            {filteredData.length > 0 ? (
                 <Box>
-                    {reportData.map((cost, index) => (
+                    {filteredData.map((cost, index) => (
                         <Box key={index} sx={{ marginBottom: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', background: categoryColors[cost.category] || '#ffffff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
                             <Typography variant="body1">Category: {cost.category}</Typography>
                             <Typography variant="body1">Sum: {cost.sum}</Typography>
