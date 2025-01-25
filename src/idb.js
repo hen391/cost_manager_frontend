@@ -35,7 +35,7 @@ export default class IDBWrapper {
       return store.add(cost);
     }
   
-    async getCostsByMonthYear(month, year) {
+    async getCostsByMonth(month) {
       const db = await this.dbPromise;
       const tx = db.transaction('costs', 'readonly');
       const store = tx.objectStore('costs');
@@ -46,30 +46,59 @@ export default class IDBWrapper {
           const cursor = event.target.result;
           if (cursor) {
             const costDate = new Date(cursor.value.date);
-            // בודקים שהחודש והשנה תואמים
-            if (costDate.getMonth() + 1 === month && costDate.getFullYear() === year) {
+            if (costDate.getMonth() + 1 === month) {
               costs.push(cursor.value);
             }
             cursor.continue();
           } else {
-            // לא נשארו רשומות
             resolve(costs);
           }
         };
       });
     }
   
-    async addTestData() {
+    async getCostsByYear(year) {
+      const db = await this.dbPromise;
+      const tx = db.transaction('costs', 'readonly');
+      const store = tx.objectStore('costs');
+      const costs = [];
+  
+      return new Promise((resolve) => {
+        store.openCursor().onsuccess = (event) => {
+          const cursor = event.target.result;
+          if (cursor) {
+            const costDate = new Date(cursor.value.date);
+            if (costDate.getFullYear() === year) {
+              costs.push(cursor.value);
+            }
+            cursor.continue();
+          } else {
+            resolve(costs);
+          }
+        };
+      });
+    }
+  
+    async getCostsByMonthYear(month, year) {
         const db = await this.dbPromise;
-        const tx = db.transaction('costs', 'readwrite');
+        const tx = db.transaction('costs', 'readonly');
         const store = tx.objectStore('costs');
-        const testData = [
-            { category: 'Food', amount: 50, date: new Date().toISOString() },
-            { category: 'Transport', amount: 20, date: new Date().toISOString() },
-            { category: 'Utilities', amount: 100, date: new Date().toISOString() }
-        ];
-        testData.forEach(cost => store.add(cost));
-        return tx.complete;
+        const costs = [];
+
+        return new Promise((resolve) => {
+            store.openCursor().onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const costDate = new Date(cursor.value.date);
+                    if (costDate.getMonth() + 1 === month && costDate.getFullYear() === year) {
+                        costs.push(cursor.value);
+                    }
+                    cursor.continue();
+                } else {
+                    resolve(costs);
+                }
+            };
+        });
     }
   
     async clearData() {

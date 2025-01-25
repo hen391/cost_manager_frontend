@@ -14,10 +14,21 @@ const CategoryPieChart = () => {
         }]
     });
 
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+    const handleMonthChange = (event) => {
+        setSelectedMonth(parseInt(event.target.value));
+    };
+
+    const handleYearChange = (event) => {
+        setSelectedYear(parseInt(event.target.value));
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
-            const costs = await idb.getCostsByMonthYear(new Date().getMonth() + 1, new Date().getFullYear());
+            const costs = await idb.getCostsByMonthYear(selectedMonth, selectedYear);
             if (costs.length === 0) {
                 console.warn('No costs found for the current month and year.');
                 setChartData({
@@ -51,22 +62,73 @@ const CategoryPieChart = () => {
         };
 
         fetchData();
-    }, []);
+    }, [selectedMonth, selectedYear]);
 
     console.log('Chart data before rendering:', chartData);
 
+    const selectStyle = {
+        padding: '10px',
+        margin: '10px',
+        borderRadius: '8px',
+        border: '1px solid #007BFF',
+        fontSize: '16px',
+        background: 'linear-gradient(145deg, #e6e6e6, #ffffff)',
+        color: '#007BFF',
+        cursor: 'pointer',
+        boxShadow: '5px 5px 10px #d1d1d1, -5px -5px 10px #ffffff',
+        transition: 'all 0.3s ease',
+        appearance: 'none',
+        outline: 'none',
+    };
+
+    const selectHoverStyle = {
+        background: 'linear-gradient(145deg, #ffffff, #e6e6e6)',
+        color: '#0056b3',
+        boxShadow: 'inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff',
+    };
+
+    const handleMouseOver = (e) => {
+        Object.assign(e.currentTarget.style, selectHoverStyle);
+    };
+
+    const handleMouseOut = (e) => {
+        Object.assign(e.currentTarget.style, selectStyle);
+    };
+
     return (
         <div>
-            <h2>Expenses by Category</h2>
-            <div style={{ width: '300px', height: '300px', margin: '0 auto' }}>
-                <Pie data={chartData} options={{
-                    plugins: {
-                        legend: {
-                            display: chartData.labels.length > 0
-                        }
-                    },
-                    maintainAspectRatio: false
-                }} />
+            {chartData.labels.length > 0 ? (
+                <div style={{ width: '300px', height: '300px', margin: '0 auto' }}>
+                    <Pie data={chartData} options={{
+                        plugins: {
+                            legend: {
+                                display: chartData.labels.length > 0
+                            }
+                        },
+                        maintainAspectRatio: false
+                    }} />
+                </div>
+            ) : (
+                <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                    No expenses found for the selected month and year.
+                </div>
+            )}
+
+            <div>
+                <label htmlFor="month">Month:</label>
+                <select id="month" value={selectedMonth} onChange={handleMonthChange} style={selectStyle} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+                    {[...Array(12).keys()].map((month) => (
+                        <option key={month + 1} value={month + 1}>{month + 1}</option>
+                    ))}
+                </select>
+
+                <label htmlFor="year">Year:</label>
+                <select id="year" value={selectedYear} onChange={handleYearChange} style={selectStyle} onMouseOver={handleMouseOver} onMouseOut={handleMouseOut}>
+                    {[...Array(10).keys()].map((yearOffset) => {
+                        const year = new Date().getFullYear() - yearOffset;
+                        return <option key={year} value={year}>{year}</option>;
+                    })}
+                </select>
             </div>
         </div>
     );
