@@ -6,8 +6,13 @@ import {
   Container,
   Paper,
   Typography,
-  Box
+  Box,
+  InputAdornment
 } from '@mui/material';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import CategoryIcon from '@mui/icons-material/Category';
+import DescriptionIcon from '@mui/icons-material/Description';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import IDBWrapper from '../idb';
 
 const db = new IDBWrapper('CostManagerDB', 1);
@@ -41,29 +46,29 @@ function AddCostForm() {
   };
 
   return (
-    <Box 
-      sx={{ 
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)',
-        py: 4
-      }}
-    >
-      <Typography variant="h4" align="center" gutterBottom>
+    <Box sx={{ p: 4 }}>
+      <Typography 
+        variant="h4" 
+        align="center" 
+        gutterBottom
+        sx={{ 
+          color: '#2c3e50',
+          fontWeight: 700,
+          mb: 4
+        }}
+      >
         Add New Expense
       </Typography>
       <Container maxWidth="sm">
         <Paper
-          elevation={8}
+          elevation={0}
           sx={{
             p: 4,
-            borderRadius: 4,
-            bgcolor: 'white'
+            borderRadius: '16px',
+            bgcolor: 'white',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
           }}
         >
-          <Typography variant="subtitle1" align="center" color="text.secondary" gutterBottom>
-            מלא/י את הפרטים הבאים כדי להוסיף הוצאה
-          </Typography>
-
           <form>
             <TextField
               label="סכום"
@@ -73,6 +78,22 @@ function AddCostForm() {
               fullWidth
               margin="normal"
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AttachMoneyIcon sx={{ color: '#6b7280' }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#3b82f6',
+                  },
+                },
+                mb: 2
+              }}
             />
 
             <TextField
@@ -84,6 +105,22 @@ function AddCostForm() {
               fullWidth
               margin="normal"
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CategoryIcon sx={{ color: '#6b7280' }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#3b82f6',
+                  },
+                },
+                mb: 2
+              }}
             >
               <MenuItem value="Food">אוכל</MenuItem>
               <MenuItem value="Transportation">תחבורה</MenuItem>
@@ -101,6 +138,22 @@ function AddCostForm() {
               fullWidth
               margin="normal"
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <DescriptionIcon sx={{ color: '#6b7280' }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#3b82f6',
+                  },
+                },
+                mb: 2
+              }}
             />
 
             <TextField
@@ -112,13 +165,47 @@ function AddCostForm() {
               fullWidth
               margin="normal"
               variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarTodayIcon sx={{ color: '#6b7280' }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: '12px',
+                  '&:hover fieldset': {
+                    borderColor: '#3b82f6',
+                  },
+                },
+                mb: 3
+              }}
               InputLabelProps={{
                 shrink: true, 
               }}
             />
 
-            <Box display="flex" justifyContent="center" mt={3}>
-              <Button variant="contained" size="large" onClick={handleSubmit}>
+            <Box display="flex" justifyContent="center">
+              <Button 
+                variant="contained" 
+                size="large" 
+                onClick={handleSubmit}
+                sx={{
+                  borderRadius: '12px',
+                  padding: '12px 48px',
+                  fontSize: '1.1rem',
+                  textTransform: 'none',
+                  background: 'linear-gradient(45deg, #3b82f6 30%, #60a5fa 90%)',
+                  boxShadow: '0 3px 15px rgba(59, 130, 246, 0.3)',
+                  '&:hover': {
+                    background: 'linear-gradient(45deg, #2563eb 30%, #3b82f6 90%)',
+                    transform: 'translateY(-1px)',
+                    boxShadow: '0 6px 20px rgba(59, 130, 246, 0.4)',
+                  },
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 הוסף הוצאה
               </Button>
             </Box>

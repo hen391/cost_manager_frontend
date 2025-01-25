@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
-import { Box, Typography, Select, MenuItem, Card, CardContent, Button, TextField } from '@mui/material';
+import { Box, Typography, Select, MenuItem, Card, CardContent, Button, TextField, InputLabel, FormControl } from '@mui/material';
 import Fuse from 'fuse.js';
+import SearchIcon from '@mui/icons-material/Search';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { InputAdornment } from '@mui/material';
 
 const categoryColors = {
-    Food: '#FFEBEE',
-    Transportation: '#E3F2FD',
-    Entertainment: '#FFF3E0',
-    Health: '#E8F5E9',
-    Education: '#F3E5F5',
-    Utilities: '#E0F7FA'
+    Food: '#4CAF50',
+    Transportation: '#2196F3',
+    Entertainment: '#FF9800',
+    Health: '#E91E63',
+    Education: '#9C27B0',
+    Utilities: '#00BCD4'
 };
 
 const MonthlyReport = () => {
@@ -20,14 +23,6 @@ const MonthlyReport = () => {
     const [categoryCounts, setCategoryCounts] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState([]);
-
-    const handleMonthChange = (event) => {
-        setSelectedMonth(parseInt(event.target.value));
-    };
-
-    const handleYearChange = (event) => {
-        setSelectedYear(parseInt(event.target.value));
-    };
 
     useEffect(() => {
         const fetchReportData = async () => {
@@ -56,18 +51,15 @@ const MonthlyReport = () => {
         setFilteredData(filteredData);
     }, [reportData, searchTerm]);
 
-    const totalExpenses = reportData.length;
-    const averageExpense = totalExpenses > 0 ? (totalSum / totalExpenses).toFixed(2) : 0;
-
     const exportToCSV = () => {
         const csvRows = [
             ['Category', 'Sum', 'Description', 'Date'],
             ...reportData.map(cost => [cost.category, cost.sum, cost.description, new Date(cost.date).toLocaleDateString()]),
             [],
             ['Summary'],
-            ['Total Expenses', totalExpenses],
+            ['Total Expenses', reportData.length],
             ['Total Sum', totalSum.toFixed(2)],
-            ['Average Expense', averageExpense],
+            ['Average Expense', reportData.length > 0 ? (totalSum / reportData.length).toFixed(2) : 'N/A'],
             ...Object.entries(categoryCounts).map(([category, count]) => [`${category} items`, count])
         ];
 
@@ -84,60 +76,176 @@ const MonthlyReport = () => {
     };
 
     return (
-        <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)', padding: '20px' }}>
-            <Typography variant="h4" align="center" gutterBottom>
+        <Box sx={{ p: 4 }}>
+            <Typography 
+                variant="h4" 
+                align="center" 
+                sx={{ 
+                    color: '#2c3e50',
+                    fontWeight: 700,
+                    mb: 4
+                }}
+            >
                 Monthly Report
             </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
-                <Select value={selectedMonth} onChange={handleMonthChange}>
-                    {[...Array(12).keys()].map((month) => (
-                        <MenuItem key={month + 1} value={month + 1}>{month + 1}</MenuItem>
-                    ))}
-                </Select>
-                <Select value={selectedYear} onChange={handleYearChange}>
-                    {[...Array(10).keys()].map((yearOffset) => {
-                        const year = new Date().getFullYear() - yearOffset;
-                        return <MenuItem key={year} value={year}>{year}</MenuItem>;
-                    })}
-                </Select>
+
+            <Box sx={{ 
+                display: 'flex', 
+                gap: 2, 
+                mb: 4,
+                flexWrap: 'wrap',
+                justifyContent: 'center'
+            }}>
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Month</InputLabel>
+                    <Select
+                        value={selectedMonth}
+                        onChange={(e) => setSelectedMonth(e.target.value)}
+                        label="Month"
+                        sx={{
+                            borderRadius: '12px',
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                        }}
+                    >
+                        {[...Array(12).keys()].map((month) => (
+                            <MenuItem key={month + 1} value={month + 1}>{month + 1}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel>Year</InputLabel>
+                    <Select
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
+                        label="Year"
+                        sx={{
+                            borderRadius: '12px',
+                            '& .MuiOutlinedInput-notchedOutline': {
+                                borderColor: 'rgba(0, 0, 0, 0.1)',
+                            },
+                        }}
+                    >
+                        {[...Array(10).keys()].map((yearOffset) => {
+                            const year = new Date().getFullYear() - yearOffset;
+                            return <MenuItem key={year} value={year}>{year}</MenuItem>;
+                        })}
+                    </Select>
+                </FormControl>
             </Box>
+
             <TextField
-                label="Search"
-                variant="outlined"
                 fullWidth
-                margin="normal"
+                variant="outlined"
+                placeholder="Search expenses..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                sx={{
+                    mb: 4,
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: '12px',
+                        '&:hover fieldset': {
+                            borderColor: '#3b82f6',
+                        },
+                    },
+                }}
+                InputProps={{
+                    startAdornment: (
+                        <InputAdornment position="start">
+                            <SearchIcon sx={{ color: '#6b7280' }} />
+                        </InputAdornment>
+                    ),
+                }}
             />
+
             {filteredData.length > 0 ? (
                 <Box>
-                    {filteredData.map((cost, index) => (
-                        <Box key={index} sx={{ marginBottom: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', background: categoryColors[cost.category] || '#ffffff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                            <Typography variant="body1">Category: {cost.category}</Typography>
-                            <Typography variant="body1">Sum: {cost.sum}</Typography>
-                            <Typography variant="body1">Description: {cost.description}</Typography>
-                            <Typography variant="body1">Date: {new Date(cost.date).toLocaleDateString()}</Typography>
-                        </Box>
-                    ))}
-                    <Card sx={{ marginTop: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                    <Box sx={{ display: 'grid', gap: 2, mb: 4 }}>
+                        {filteredData.map((cost, index) => (
+                            <Card 
+                                key={index} 
+                                sx={{ 
+                                    borderRadius: '16px',
+                                    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                                    transition: 'transform 0.2s ease',
+                                    '&:hover': {
+                                        transform: 'translateY(-2px)',
+                                    },
+                                }}
+                            >
+                                <CardContent>
+                                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                                        <Typography variant="h6" sx={{ color: categoryColors[cost.category] }}>
+                                            {cost.category}
+                                        </Typography>
+                                        <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                                            ₪{cost.sum}
+                                        </Typography>
+                                    </Box>
+                                    <Typography color="text.secondary">{cost.description}</Typography>
+                                    <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                                        {new Date(cost.date).toLocaleDateString()}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </Box>
+
+                    <Card sx={{ 
+                        borderRadius: '16px',
+                        boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                        mb: 4
+                    }}>
                         <CardContent>
-                            <Typography variant="h6" align="center">Summary</Typography>
-                            <Typography variant="body1">Total Expenses: {totalExpenses}</Typography>
-                            <Typography variant="body1">Total Sum: {totalSum.toFixed(2)}</Typography>
-                            <Typography variant="body1">Average Expense: {averageExpense}</Typography>
-                            {Object.entries(categoryCounts).map(([category, count]) => (
-                                <Typography key={category} variant="body2">{category}: {count} items</Typography>
-                            ))}
+                            <Typography variant="h6" sx={{ mb: 2, fontWeight: 600 }}>Summary</Typography>
+                            <Box sx={{ display: 'grid', gap: 1 }}>
+                                <Typography>Total Expenses: {reportData.length}</Typography>
+                                <Typography>Total Sum: ₪{totalSum.toFixed(2)}</Typography>
+                                {Object.entries(categoryCounts).map(([category, count]) => (
+                                    <Typography key={category} sx={{ color: categoryColors[category] }}>
+                                        {category}: {count} items
+                                    </Typography>
+                                ))}
+                            </Box>
                         </CardContent>
                     </Card>
-                    <Box display="flex" justifyContent="center" mt={3}>
-                        <Button variant="contained" onClick={exportToCSV}>
+
+                    <Box display="flex" justifyContent="center">
+                        <Button
+                            variant="contained"
+                            onClick={exportToCSV}
+                            startIcon={<FileDownloadIcon />}
+                            sx={{
+                                borderRadius: '12px',
+                                padding: '12px 24px',
+                                textTransform: 'none',
+                                background: 'linear-gradient(45deg, #3b82f6 30%, #60a5fa 90%)',
+                                boxShadow: '0 3px 15px rgba(59, 130, 246, 0.3)',
+                                '&:hover': {
+                                    background: 'linear-gradient(45deg, #2563eb 30%, #3b82f6 90%)',
+                                    transform: 'translateY(-1px)',
+                                    boxShadow: '0 6px 20px rgba(59, 130, 246, 0.4)',
+                                },
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
                             Export to CSV
                         </Button>
                     </Box>
                 </Box>
             ) : (
-                <Typography variant="body1">No expenses found for the selected month and year.</Typography>
+                <Typography 
+                    variant="body1" 
+                    align="center" 
+                    sx={{ 
+                        color: '#6b7280',
+                        fontSize: '1.1rem'
+                    }}
+                >
+                    No expenses found for the selected month and year.
+                </Typography>
             )}
         </Box>
     );
