@@ -108,5 +108,13 @@ export default class IDBWrapper {
         store.clear();
         return tx.complete;
     }
+
+    async updateCost(cost) {
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readwrite');
+        const store = tx.objectStore('costs');
+        store.put(cost);
+        return tx.complete;
+    }
   }
   

@@ -59,7 +59,20 @@ const Sidebar = ({ onSelectComponent }) => {
             >
                 Monthly Report
             </Button>
-            {/* Add more buttons for other components as needed */}
+            <Button 
+                variant="contained" 
+                onClick={() => onSelectComponent('EditExpenseForm')} 
+                sx={{ 
+                    marginBottom: '10px',
+                    width: '100%',
+                    backgroundColor: '#fbc2eb',
+                    '&:hover': {
+                        backgroundColor: '#f8a1d1',
+                    }
+                }}
+            >
+                Edit Expense
+            </Button>
         </Box>
     );
 };

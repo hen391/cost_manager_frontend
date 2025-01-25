@@ -3,6 +3,7 @@ import AddCostForm from './components/AddCostForm';
 import CategoryPieChart from './components/CategoryPieChart';
 import Sidebar from './components/Sidebar';
 import MonthlyReport from './components/MonthlyReport';
+import EditExpenseForm from './components/EditExpenseForm';
 import { IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -22,6 +23,8 @@ function App() {
                 return <CategoryPieChart />;
             case 'MonthlyReport':
                 return <MonthlyReport />;
+            case 'EditExpenseForm':
+                return <EditExpenseForm />;
             default:
                 return <AddCostForm />;
         }

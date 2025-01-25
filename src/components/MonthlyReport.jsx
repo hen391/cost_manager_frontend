@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
-import { Box, Typography, Select, MenuItem, Card, CardContent } from '@mui/material';
+import { Box, Typography, Select, MenuItem, Card, CardContent, Button } from '@mui/material';
 
 const categoryColors = {
     Food: '#FFEBEE',
@@ -47,6 +47,30 @@ const MonthlyReport = () => {
     const totalExpenses = reportData.length;
     const averageExpense = totalExpenses > 0 ? (totalSum / totalExpenses).toFixed(2) : 0;
 
+    const exportToCSV = () => {
+        const csvRows = [
+            ['Category', 'Sum', 'Description', 'Date'],
+            ...reportData.map(cost => [cost.category, cost.sum, cost.description, new Date(cost.date).toLocaleDateString()]),
+            [],
+            ['Summary'],
+            ['Total Expenses', totalExpenses],
+            ['Total Sum', totalSum.toFixed(2)],
+            ['Average Expense', averageExpense],
+            ...Object.entries(categoryCounts).map(([category, count]) => [`${category} items`, count])
+        ];
+
+        const csvContent = csvRows.map(e => e.join(",")).join("\n");
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `Monthly_Report_${selectedMonth}_${selectedYear}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)', padding: '20px' }}>
             <Typography variant="h4" align="center" gutterBottom>
@@ -86,6 +110,11 @@ const MonthlyReport = () => {
                             ))}
                         </CardContent>
                     </Card>
+                    <Box display="flex" justifyContent="center" mt={3}>
+                        <Button variant="contained" onClick={exportToCSV}>
+                            Export to CSV
+                        </Button>
+                    </Box>
                 </Box>
             ) : (
                 <Typography variant="body1">No expenses found for the selected month and year.</Typography>
