@@ -1,38 +1,90 @@
+// src/idb.js
+
 export default class IDBWrapper {
     constructor(dbName, version) {
-        this.dbName = dbName;
-        this.version = version;
-        this.dbPromise = this.initDB();
+      this.dbName = dbName;
+      this.version = version;
+      this.dbPromise = this.initDB();
     }
-
+  
     async initDB() {
-        return new Promise((resolve, reject) => {
-            const request = indexedDB.open(this.dbName, this.version);
-
-            request.onupgradeneeded = (event) => {
-                const db = event.target.result;
-                if (!db.objectStoreNames.contains('costs')) {
-                    db.createObjectStore('costs', { keyPath: 'id', autoIncrement: true });
-                }
-            };
-
-            request.onsuccess = (event) => resolve(event.target.result);
-            request.onerror = (event) => reject(event.target.error);
-        });
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(this.dbName, this.version);
+  
+        request.onupgradeneeded = (event) => {
+          const db = event.target.result;
+          // בודק אם לא קיימת חנות בשם 'costs'; אם לא קיימת, יוצרים אותה
+          if (!db.objectStoreNames.contains('costs')) {
+            db.createObjectStore('costs', { keyPath: 'id', autoIncrement: true });
+          }
+        };
+  
+        request.onsuccess = (event) => {
+          resolve(event.target.result);
+        };
+        request.onerror = (event) => {
+          reject(event.target.error);
+        };
+      });
     }
-
+  
     async addCost(cost) {
-        const db = await this.dbPromise;
-        const tx = db.transaction('costs', 'readwrite');
-        const store = tx.objectStore('costs');
-        return store.add(cost);
+      const db = await this.dbPromise;
+      const tx = db.transaction('costs', 'readwrite');
+      const store = tx.objectStore('costs');
+      return store.add(cost);
     }
-
+  
+    async getCostsByMonth(month) {
+      const db = await this.dbPromise;
+      const tx = db.transaction('costs', 'readonly');
+      const store = tx.objectStore('costs');
+      const costs = [];
+  
+      return new Promise((resolve) => {
+        store.openCursor().onsuccess = (event) => {
+          const cursor = event.target.result;
+          if (cursor) {
+            const costDate = new Date(cursor.value.date);
+            if (costDate.getMonth() + 1 === month) {
+              costs.push(cursor.value);
+            }
+            cursor.continue();
+          } else {
+            resolve(costs);
+          }
+        };
+      });
+    }
+  
+    async getCostsByYear(year) {
+      const db = await this.dbPromise;
+      const tx = db.transaction('costs', 'readonly');
+      const store = tx.objectStore('costs');
+      const costs = [];
+  
+      return new Promise((resolve) => {
+        store.openCursor().onsuccess = (event) => {
+          const cursor = event.target.result;
+          if (cursor) {
+            const costDate = new Date(cursor.value.date);
+            if (costDate.getFullYear() === year) {
+              costs.push(cursor.value);
+            }
+            cursor.continue();
+          } else {
+            resolve(costs);
+          }
+        };
+      });
+    }
+  
     async getCostsByMonthYear(month, year) {
         const db = await this.dbPromise;
         const tx = db.transaction('costs', 'readonly');
         const store = tx.objectStore('costs');
         const costs = [];
+
         return new Promise((resolve) => {
             store.openCursor().onsuccess = (event) => {
                 const cursor = event.target.result;
@@ -48,4 +100,21 @@ export default class IDBWrapper {
             };
         });
     }
-}
+  
+    async clearData() {
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readwrite');
+        const store = tx.objectStore('costs');
+        store.clear();
+        return tx.complete;
+    }
+
+    async updateCost(cost) {
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readwrite');
+        const store = tx.objectStore('costs');
+        store.put(cost);
+        return tx.complete;
+    }
+  }
+  
