@@ -4,7 +4,7 @@ import CategoryPieChart from './components/CategoryPieChart';
 import Sidebar from './components/Sidebar';
 import MonthlyReport from './components/MonthlyReport';
 import EditExpenseForm from './components/EditExpenseForm';
-import { IconButton } from '@mui/material';
+import { IconButton, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 function App() {
@@ -31,24 +31,48 @@ function App() {
     };
 
     return (
-        <div style={{ display: 'flex' }}>
+        <Box sx={{ display: 'flex', height: 'auto', minHeight: '100vh' }}>
             {isSidebarOpen && (
-                <div style={{ position: 'relative' }}>
+                <Box sx={{ position: 'relative', height: '100%' }}>
                     <Sidebar onSelectComponent={setSelectedComponent} />
-                    <IconButton onClick={toggleSidebar} style={{ position: 'absolute', top: 10, right: -40, zIndex: 1 }}>
+                    <IconButton 
+                        onClick={toggleSidebar} 
+                        sx={{ 
+                            position: 'absolute', 
+                            top: 10, 
+                            right: -20, 
+                            zIndex: 1,
+                            backgroundColor: 'white',
+                            '&:hover': {
+                                backgroundColor: '#f5f5f5',
+                            }
+                        }}
+                    >
                         <MenuIcon />
                     </IconButton>
-                </div>
+                </Box>
             )}
-            <div style={{ flex: 1, position: 'relative' }}>
+            <Box sx={{ flex: 1, position: 'relative', height: '100%' }}>
                 {!isSidebarOpen && (
-                    <IconButton onClick={toggleSidebar} style={{ position: 'absolute', top: 10, left: 10, zIndex: 1 }}>
+                    <IconButton 
+                        onClick={toggleSidebar} 
+                        sx={{ 
+                            position: 'absolute', 
+                            top: 10, 
+                            left: 10, 
+                            zIndex: 1,
+                            backgroundColor: 'white',
+                            '&:hover': {
+                                backgroundColor: '#f5f5f5',
+                            }
+                        }}
+                    >
                         <MenuIcon />
                     </IconButton>
                 )}
                 {renderComponent()}
-            </div>
-        </div>
+            </Box>
+        </Box>
     );
 }
 

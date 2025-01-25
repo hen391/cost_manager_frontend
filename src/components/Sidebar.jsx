@@ -1,74 +1,116 @@
 import React from 'react';
-import { Button, Box } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import PieChartIcon from '@mui/icons-material/PieChart';
+import DescriptionIcon from '@mui/icons-material/Description';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Sidebar = ({ onSelectComponent }) => {
     return (
         <Box 
             sx={{ 
-                width: '200px', 
-                height: '100vh', 
-                background: 'linear-gradient(135deg, #f6d365 0%, #fda085 100%)',
+                width: '280px',
+                height: '100%',
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(10px)',
+                borderRight: '1px solid rgba(255, 255, 255, 0.2)',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',
-                padding: '20px',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                borderRadius: '10px',
-                overflow: 'hidden'
+                padding: '32px 20px',
+                gap: '24px'
             }}
         >
-            <Button 
-                variant="contained" 
-                onClick={() => onSelectComponent('AddCostForm')} 
+            <Typography 
+                variant="h5" 
                 sx={{ 
-                    marginBottom: '10px',
-                    width: '100%',
-                    backgroundColor: '#ff9a9e',
+                    color: '#2c3e50',
+                    fontWeight: 600,
+                    textAlign: 'center',
+                    marginBottom: '20px'
+                }}
+            >
+                Cost Manager
+            </Typography>
+
+            <Button 
+                variant="text" 
+                onClick={() => onSelectComponent('AddCostForm')} 
+                startIcon={<AddIcon />}
+                sx={{ 
+                    padding: '12px 20px',
+                    justifyContent: 'flex-start',
+                    color: '#2c3e50',
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    borderRadius: '12px',
                     '&:hover': {
-                        backgroundColor: '#ff7a7e',
-                    }
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    },
+                    transition: 'all 0.3s ease'
                 }}
             >
                 Add Cost
             </Button>
+
             <Button 
-                variant="contained" 
+                variant="text" 
                 onClick={() => onSelectComponent('CategoryPieChart')} 
+                startIcon={<PieChartIcon />}
                 sx={{ 
-                    marginBottom: '10px',
-                    width: '100%',
-                    backgroundColor: '#fad0c4',
+                    padding: '12px 20px',
+                    justifyContent: 'flex-start',
+                    color: '#2c3e50',
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    borderRadius: '12px',
                     '&:hover': {
-                        backgroundColor: '#f8b0a4',
-                    }
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    },
+                    transition: 'all 0.3s ease'
                 }}
             >
                 Category Chart
             </Button>
+
             <Button 
-                variant="contained" 
+                variant="text" 
                 onClick={() => onSelectComponent('MonthlyReport')} 
+                startIcon={<DescriptionIcon />}
                 sx={{ 
-                    marginBottom: '10px',
-                    width: '100%',
-                    backgroundColor: '#a1c4fd',
+                    padding: '12px 20px',
+                    justifyContent: 'flex-start',
+                    color: '#2c3e50',
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    borderRadius: '12px',
                     '&:hover': {
-                        backgroundColor: '#89b3f5',
-                    }
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    },
+                    transition: 'all 0.3s ease'
                 }}
             >
                 Monthly Report
             </Button>
+
             <Button 
-                variant="contained" 
+                variant="text" 
                 onClick={() => onSelectComponent('EditExpenseForm')} 
+                startIcon={<EditIcon />}
                 sx={{ 
-                    marginBottom: '10px',
-                    width: '100%',
-                    backgroundColor: '#fbc2eb',
+                    padding: '12px 20px',
+                    justifyContent: 'flex-start',
+                    color: '#2c3e50',
+                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                    borderRadius: '12px',
                     '&:hover': {
-                        backgroundColor: '#f8a1d1',
-                    }
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
+                    },
+                    transition: 'all 0.3s ease'
                 }}
             >
                 Edit Expense
