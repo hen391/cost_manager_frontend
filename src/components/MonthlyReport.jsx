@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
 import { Box, Typography, Select, MenuItem } from '@mui/material';
 
+const categoryColors = {
+    Food: '#FFEBEE',
+    Transportation: '#E3F2FD',
+    Entertainment: '#FFF3E0',
+    Health: '#E8F5E9',
+    Education: '#F3E5F5',
+    Utilities: '#E0F7FA'
+};
+
 const MonthlyReport = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -37,10 +46,7 @@ const MonthlyReport = () => {
 
     return (
         <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)', padding: '20px' }}>
-            <Typography variant="h4" gutterBottom>
-                Monthly Report
-            </Typography>
-            <Box sx={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
                 <Select value={selectedMonth} onChange={handleMonthChange}>
                     {[...Array(12).keys()].map((month) => (
                         <MenuItem key={month + 1} value={month + 1}>{month + 1}</MenuItem>
@@ -56,7 +62,7 @@ const MonthlyReport = () => {
             {reportData.length > 0 ? (
                 <Box>
                     {reportData.map((cost, index) => (
-                        <Box key={index} sx={{ marginBottom: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', background: '#ffffff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
+                        <Box key={index} sx={{ marginBottom: '10px', padding: '10px', border: '1px solid #ccc', borderRadius: '5px', background: categoryColors[cost.category] || '#ffffff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
                             <Typography variant="body1">Category: {cost.category}</Typography>
                             <Typography variant="body1">Sum: {cost.sum}</Typography>
                             <Typography variant="body1">Description: {cost.description}</Typography>

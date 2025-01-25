@@ -29,11 +29,20 @@ function App() {
 
     return (
         <div style={{ display: 'flex' }}>
-            {isSidebarOpen && <Sidebar onSelectComponent={setSelectedComponent} />}
+            {isSidebarOpen && (
+                <div style={{ position: 'relative' }}>
+                    <Sidebar onSelectComponent={setSelectedComponent} />
+                    <IconButton onClick={toggleSidebar} style={{ position: 'absolute', top: 10, right: -40, zIndex: 1 }}>
+                        <MenuIcon />
+                    </IconButton>
+                </div>
+            )}
             <div style={{ flex: 1, position: 'relative' }}>
-                <IconButton onClick={toggleSidebar} style={{ position: 'absolute', top: 10, left: 10 }}>
-                    <MenuIcon />
-                </IconButton>
+                {!isSidebarOpen && (
+                    <IconButton onClick={toggleSidebar} style={{ position: 'absolute', top: 10, left: 10, zIndex: 1 }}>
+                        <MenuIcon />
+                    </IconButton>
+                )}
                 {renderComponent()}
             </div>
         </div>

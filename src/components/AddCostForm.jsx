@@ -88,6 +88,9 @@ function AddCostForm() {
               <MenuItem value="Food">אוכל</MenuItem>
               <MenuItem value="Transportation">תחבורה</MenuItem>
               <MenuItem value="Entertainment">בידור</MenuItem>
+              <MenuItem value="Health">בריאות</MenuItem>
+              <MenuItem value="Education">חינוך</MenuItem>
+              <MenuItem value="Utilities">שירותים</MenuItem>
             </TextField>
 
             <TextField
