@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
-import { Box, Typography, Select, MenuItem } from '@mui/material';
+import { Box, Typography, Select, MenuItem, Card, CardContent } from '@mui/material';
 
 const categoryColors = {
     Food: '#FFEBEE',
@@ -44,8 +44,14 @@ const MonthlyReport = () => {
         fetchReportData();
     }, [selectedMonth, selectedYear]);
 
+    const totalExpenses = reportData.length;
+    const averageExpense = totalExpenses > 0 ? (totalSum / totalExpenses).toFixed(2) : 0;
+
     return (
         <Box sx={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)', padding: '20px' }}>
+            <Typography variant="h4" align="center" gutterBottom>
+                Monthly Report
+            </Typography>
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '20px' }}>
                 <Select value={selectedMonth} onChange={handleMonthChange}>
                     {[...Array(12).keys()].map((month) => (
@@ -69,12 +75,17 @@ const MonthlyReport = () => {
                             <Typography variant="body1">Date: {new Date(cost.date).toLocaleDateString()}</Typography>
                         </Box>
                     ))}
-                    <Box sx={{ marginTop: '20px', padding: '10px', borderTop: '2px solid #ccc', background: '#ffffff', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-                        <Typography variant="h6">Total Sum: {totalSum}</Typography>
-                        {Object.entries(categoryCounts).map(([category, count]) => (
-                            <Typography key={category} variant="body2">{category}: {count} items</Typography>
-                        ))}
-                    </Box>
+                    <Card sx={{ marginTop: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)' }}>
+                        <CardContent>
+                            <Typography variant="h6" align="center">Summary</Typography>
+                            <Typography variant="body1">Total Expenses: {totalExpenses}</Typography>
+                            <Typography variant="body1">Total Sum: {totalSum.toFixed(2)}</Typography>
+                            <Typography variant="body1">Average Expense: {averageExpense}</Typography>
+                            {Object.entries(categoryCounts).map(([category, count]) => (
+                                <Typography key={category} variant="body2">{category}: {count} items</Typography>
+                            ))}
+                        </CardContent>
+                    </Card>
                 </Box>
             ) : (
                 <Typography variant="body1">No expenses found for the selected month and year.</Typography>

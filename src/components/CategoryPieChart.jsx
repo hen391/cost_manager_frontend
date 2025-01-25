@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import IDBWrapper from '../idb';
+import { Typography } from '@mui/material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -97,15 +98,35 @@ const CategoryPieChart = () => {
 
     return (
         <div style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)', padding: '20px' }}>
+            <Typography variant="h4" align="center" gutterBottom>
+                Category Distribution
+            </Typography>
             {chartData.labels.length > 0 ? (
-                <div style={{ width: '300px', height: '300px', margin: '0 auto' }}>
+                <div style={{ width: '400px', height: '400px', margin: '0 auto' }}>
                     <Pie data={chartData} options={{
                         plugins: {
                             legend: {
-                                display: chartData.labels.length > 0
+                                display: chartData.labels.length > 0,
+                                position: 'bottom',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) {
+                                            label += ': ';
+                                        }
+                                        label += context.raw;
+                                        return label;
+                                    }
+                                }
                             }
                         },
-                        maintainAspectRatio: false
+                        maintainAspectRatio: false,
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
                     }} />
                 </div>
             ) : (

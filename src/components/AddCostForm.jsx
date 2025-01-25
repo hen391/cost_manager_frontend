@@ -48,6 +48,9 @@ function AddCostForm() {
         py: 4
       }}
     >
+      <Typography variant="h4" align="center" gutterBottom>
+        Add New Expense
+      </Typography>
       <Container maxWidth="sm">
         <Paper
           elevation={8}
@@ -57,9 +60,6 @@ function AddCostForm() {
             bgcolor: 'white'
           }}
         >
-          <Typography variant="h4" align="center" gutterBottom>
-            הוספת הוצאה חדשה
-          </Typography>
           <Typography variant="subtitle1" align="center" color="text.secondary" gutterBottom>
             מלא/י את הפרטים הבאים כדי להוסיף הוצאה
           </Typography>
