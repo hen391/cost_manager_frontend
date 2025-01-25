@@ -58,5 +58,26 @@ export default class IDBWrapper {
         };
       });
     }
+  
+    async addTestData() {
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readwrite');
+        const store = tx.objectStore('costs');
+        const testData = [
+            { category: 'Food', amount: 50, date: new Date().toISOString() },
+            { category: 'Transport', amount: 20, date: new Date().toISOString() },
+            { category: 'Utilities', amount: 100, date: new Date().toISOString() }
+        ];
+        testData.forEach(cost => store.add(cost));
+        return tx.complete;
+    }
+  
+    async clearData() {
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readwrite');
+        const store = tx.objectStore('costs');
+        store.clear();
+        return tx.complete;
+    }
   }
   
