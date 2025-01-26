@@ -28,26 +28,6 @@ const Sidebar = ({ onSelectComponent }) => {
                 gap: '24px'
             }}
         >
-            <Button 
-                variant="text" 
-                onClick={toggleSidebar} 
-                sx={{ 
-                    padding: '12px 20px',
-                    justifyContent: 'flex-start',
-                    color: '#2c3e50',
-                    backgroundColor: 'rgba(255, 255, 255, 0.7)',
-                    borderRadius: '12px',
-                    '&:hover': {
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 4px 8px rgba(0,0,0,0.1)'
-                    },
-                    transition: 'all 0.3s ease'
-                }}
-            >
-                {isOpen ? 'Close Sidebar' : 'Open Sidebar'}
-            </Button>
-
             <Typography 
                 variant="h5" 
                 sx={{ 
