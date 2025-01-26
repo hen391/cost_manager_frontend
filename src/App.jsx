@@ -44,9 +44,8 @@ function App() {
                         onClick={toggleSidebar} 
                         sx={{ 
                             position: 'absolute', 
-                            top: '50%',
-                            right: -20,
-                            transform: 'translateY(-50%)',
+                            top: '20px', 
+                            right: '20px',
                             zIndex: 1,
                             backgroundColor: 'white',
                             boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
@@ -70,8 +69,8 @@ function App() {
                         onClick={toggleSidebar} 
                         sx={{ 
                             position: 'fixed', 
-                            top: 20, 
-                            left: 20, 
+                            top: '20px', 
+                            left: '20px',
                             zIndex: 1,
                             backgroundColor: 'white',
                             boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
