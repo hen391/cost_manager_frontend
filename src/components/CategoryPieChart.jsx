@@ -27,6 +27,8 @@ const CategoryPieChart = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
+// Fetches cost data from the database whenever the selected month or year changes.
+// Processes the data to calculate total expenses per category for the pie chart.
     useEffect(() => {
         const fetchData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
@@ -66,8 +68,13 @@ const CategoryPieChart = () => {
             });
         };
 
+// Retrieves and processes data from the IndexedDB to update the pie chart's data.
+// Calculates totals for each expense category.
         fetchData();
     }, [selectedMonth, selectedYear]);
+
+// Layout for selecting month and year and displaying the pie chart.
+// Includes Material-UI components and the Chart.js Pie chart.
 
     return (
         <Box sx={{ p: 4 }}>

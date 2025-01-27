@@ -25,16 +25,20 @@ function AddCostForm() {
     date: ''
   });
 
-  useEffect(() => {
+    // Automatically sets the current date when the component is loaded.
+    useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];
     setForm((prevForm) => ({ ...prevForm, date: currentDate }));
   }, []);
 
-  const handleChange = (e) => {
+    // Updates the form state when the user modifies any input field.
+    const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
+// Handles form submission by adding a new cost entry to the database.
+// Resets the form fields after successful addition.
+    const handleSubmit = async () => {
     if (!form.sum || !form.category) {
       alert('יש למלא סכום וקטגוריה לפני הוספה.');
       return;
@@ -42,16 +46,16 @@ function AddCostForm() {
 
     await db.addCost({ ...form, date: new Date(form.date) });
     alert('הוצאה נוספה בהצלחה!');
-    setForm({ sum: '', category: '', description: '', date: form.date }); 
+    setForm({ sum: '', category: '', description: '', date: form.date });
   };
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography 
-        variant="h4" 
-        align="center" 
+      <Typography
+        variant="h4"
+        align="center"
         gutterBottom
-        sx={{ 
+        sx={{
           color: '#2c3e50',
           fontWeight: 700,
           mb: 4
@@ -182,14 +186,14 @@ function AddCostForm() {
                 mb: 3
               }}
               InputLabelProps={{
-                shrink: true, 
+                shrink: true,
               }}
             />
 
             <Box display="flex" justifyContent="center">
-              <Button 
-                variant="contained" 
-                size="large" 
+              <Button
+                variant="contained"
+                size="large"
                 onClick={handleSubmit}
                 sx={{
                   borderRadius: '12px',

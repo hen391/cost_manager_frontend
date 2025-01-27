@@ -7,6 +7,7 @@ import EditExpenseForm from './components/EditExpenseForm';
 import { IconButton, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
+// Main application component
 function App() {
     const [selectedComponent, setSelectedComponent] = useState('AddCostForm');
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -30,6 +31,8 @@ function App() {
         }
     };
 
+// Renders the sidebar alongside the main content area.
+// The main content area changes dynamically based on the selected component.
     return (
         <Box sx={{ 
             display: 'flex', 

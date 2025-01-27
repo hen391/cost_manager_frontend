@@ -24,6 +24,8 @@ const MonthlyReport = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState([]);
 
+// Fetches expense data for the selected month and year from the IndexedDB.
+// Calculates the total sum and counts of items per category.
     useEffect(() => {
         const fetchReportData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
@@ -42,6 +44,7 @@ const MonthlyReport = () => {
         fetchReportData();
     }, [selectedMonth, selectedYear]);
 
+    // Filters the report data based on the user's search term using the Fuse.js library.
     useEffect(() => {
         const fuse = new Fuse(reportData, {
             keys: ['category', 'description', 'date'],
@@ -51,6 +54,7 @@ const MonthlyReport = () => {
         setFilteredData(filteredData);
     }, [reportData, searchTerm]);
 
+    // Generates a CSV file from the report data and triggers its download.
     const exportToCSV = () => {
         const csvRows = [
             ['Category', 'Sum', 'Description', 'Date'],
@@ -75,6 +79,8 @@ const MonthlyReport = () => {
         document.body.removeChild(link);
     };
 
+// Layout for filtering, searching, and displaying the monthly report.
+// Includes summary data and an export-to-CSV button.
     return (
         <Box sx={{ p: 4 }}>
             <Typography 
