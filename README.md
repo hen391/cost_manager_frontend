@@ -82,16 +82,25 @@ Make sure you have the following installed on your machine:
 
 ## Project Structure
 ```
-src/
-├── components/
-│   ├── AddCostForm.jsx       # Component to add new expenses
-│   ├── CategoryPieChart.jsx  # Component to visualize expenses by category
-│   ├── EditExpenseForm.jsx   # Component to edit existing expenses
-│   ├── MonthlyReport.jsx     # Component for monthly expense reports
-│   └── Sidebar.jsx           # Sidebar navigation
-├── idb.js                    # IndexedDB wrapper for managing expense data
-├── App.jsx                   # Main application component
-├── index.js                  # Entry point for the application
+cost_manager_frontend/
+├── dist/                        # Build output directory (auto-generated after running `npm run build`)
+│   ├── index.html               # Main HTML file for the React app
+│   └── bundle.js              
+├── src/
+│   ├── components/
+│   │   ├── add_cost_form.jsx         # Component for adding new cost entries
+│   │   ├── category_pie_chart.jsx    # Component for displaying category-wise pie chart
+│   │   ├── edit_expense_form.jsx     # Component for editing existing expenses
+│   │   ├── monthly_report.jsx        # Component for generating and exporting monthly reports
+│   │   ├── sidebar.jsx               # Sidebar navigation component
+│   ├── app.jsx                       # Main application component
+│   ├── idb.js                        # IndexedDB wrapper for database operations
+│   ├── index.js                      # Entry point for the React application
+├── package.json                     # Project configuration and dependencies
+├── package-lock.json                # Dependency tree lock file
+├── README.md                        # Documentation for the project
+├── .gitignore                       # Files and directories to ignore in Git
+├── node_modules/                    # Installed dependencies (auto-generated)
 ```
 
 ---
