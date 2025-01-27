@@ -1,3 +1,8 @@
+// src/edit_expense_form.jsx
+/**
+ * Component for editing an existing cost entry.
+ * Provides a form to select and update an expense from the database.
+ */
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -32,7 +37,11 @@ const categoryColors = {
   Utilities: '#00BCD4'
 };
 
-function EditExpenseForm() {
+/**
+ * Edit_expense_form Component
+ * @returns {JSX.Element} A form to edit an existing cost entry.
+ */
+function Edit_expense_form() {
   const [form, setForm] = useState({
     id: '',
     sum: '',
@@ -45,7 +54,9 @@ function EditExpenseForm() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-  // Fetches expenses for the selected month and year from the database.
+  /**
+   * Fetches all expenses from the database on component mount.
+   */
   useEffect(() => {
     const fetchExpenses = async () => {
       const allExpenses = await db.getCostsByMonthYear(selectedMonth, selectedYear);
@@ -54,12 +65,17 @@ function EditExpenseForm() {
     fetchExpenses();
   }, [selectedMonth, selectedYear]);
 
-  // Updates the form state when the user modifies any input field.
+  /**
+   * Handles form field changes.
+   * @param {Object} e - The event object.
+   */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // Updates the selected expense in the IndexedDB and resets the form fields after editing.
+  /**
+   * Submits the updated expense to the database.
+   */
   const handleEdit = async () => {
     if (!form.id || !form.sum || !form.category) {
       alert('יש לבחור הוצאה ולמלא סכום וקטגוריה לפני עריכה.');
@@ -72,7 +88,6 @@ function EditExpenseForm() {
     setForm({ id: '', sum: '', category: '', description: '', date: '' });
   };
 
-  // Populates the form fields with data from the selected expense.
   const handleExpenseSelect = (event) => {
     const selectedExpense = expenses.find(expense => expense.id === event.target.value);
     if (selectedExpense) {
@@ -86,8 +101,6 @@ function EditExpenseForm() {
     }
   };
 
-// Form layout for editing an existing expense.
-// Includes dropdown for selecting an expense and fields for editing its details.
   return (
     <Box sx={{ p: 4 }}>
       <Typography 
@@ -347,4 +360,4 @@ function EditExpenseForm() {
   );
 }
 
-export default EditExpenseForm; 
+export default Edit_expense_form;

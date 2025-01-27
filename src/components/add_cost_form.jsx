@@ -1,3 +1,8 @@
+// src/add_cost_form.jsx
+/**
+ * Component for adding a new cost entry.
+ * Provides a form with fields for sum, category, description, and date.
+ */
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -17,7 +22,11 @@ import IDBWrapper from '../idb';
 
 const db = new IDBWrapper('CostManagerDB', 1);
 
-function AddCostForm() {
+/**
+ * Add_cost_form Component
+ * @returns {JSX.Element} A form to add new costs.
+ */
+function Add_cost_form() {
   const [form, setForm] = useState({
     sum: '',
     category: '',
@@ -31,13 +40,17 @@ function AddCostForm() {
     setForm((prevForm) => ({ ...prevForm, date: currentDate }));
   }, []);
 
-    // Updates the form state when the user modifies any input field.
+    /**
+     * Handles input field changes.
+     * @param {Object} e - The event object.
+     */
     const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-// Handles form submission by adding a new cost entry to the database.
-// Resets the form fields after successful addition.
+    /**
+     * Submits the form and adds a new cost entry to the database.
+     */
     const handleSubmit = async () => {
     if (!form.sum || !form.category) {
       alert('יש למלא סכום וקטגוריה לפני הוספה.');
@@ -220,4 +233,4 @@ function AddCostForm() {
   );
 }
 
-export default AddCostForm;
+export default Add_cost_form;

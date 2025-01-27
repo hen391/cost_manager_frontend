@@ -1,3 +1,8 @@
+// src/Monthly_report.jsx
+/**
+ * Component for generating and displaying monthly expense reports.
+ * Provides options to filter expenses by month/year and export to CSV.
+ */
 import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
 import { Box, Typography, Select, MenuItem, Card, CardContent, Button, TextField, InputLabel, FormControl } from '@mui/material';
@@ -15,7 +20,11 @@ const categoryColors = {
     Utilities: '#00BCD4'
 };
 
-const MonthlyReport = () => {
+/**
+ * Monthly_report Component
+ * @returns {JSX.Element} A component to display and export monthly reports.
+ */
+const Monthly_report = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [reportData, setReportData] = useState([]);
@@ -24,8 +33,9 @@ const MonthlyReport = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredData, setFilteredData] = useState([]);
 
-// Fetches expense data for the selected month and year from the IndexedDB.
-// Calculates the total sum and counts of items per category.
+    /**
+     * Fetches expenses for the selected month and year.
+     */
     useEffect(() => {
         const fetchReportData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
@@ -44,7 +54,9 @@ const MonthlyReport = () => {
         fetchReportData();
     }, [selectedMonth, selectedYear]);
 
-    // Filters the report data based on the user's search term using the Fuse.js library.
+    /**
+     * Filters expenses based on the search term.
+     */
     useEffect(() => {
         const fuse = new Fuse(reportData, {
             keys: ['category', 'description', 'date'],
@@ -54,7 +66,9 @@ const MonthlyReport = () => {
         setFilteredData(filteredData);
     }, [reportData, searchTerm]);
 
-    // Generates a CSV file from the report data and triggers its download.
+    /**
+     * Exports the filtered expenses to a CSV file.
+     */
     const exportToCSV = () => {
         const csvRows = [
             ['Category', 'Sum', 'Description', 'Date'],
@@ -79,8 +93,6 @@ const MonthlyReport = () => {
         document.body.removeChild(link);
     };
 
-// Layout for filtering, searching, and displaying the monthly report.
-// Includes summary data and an export-to-CSV button.
     return (
         <Box sx={{ p: 4 }}>
             <Typography 
@@ -257,4 +269,4 @@ const MonthlyReport = () => {
     );
 };
 
-export default MonthlyReport;
+export default Monthly_report;

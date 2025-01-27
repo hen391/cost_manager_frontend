@@ -1,3 +1,8 @@
+// src/sidebar.jsx
+/**
+ * Sidebar Component
+ * Provides navigation options to switch between different features of the application.
+ */
 import React from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -5,8 +10,12 @@ import PieChartIcon from '@mui/icons-material/PieChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EditIcon from '@mui/icons-material/Edit';
 
-// Sidebar layout with navigation buttons for different application features.
-// Includes buttons for Add Cost, Category Chart, Monthly Report, and Edit Expense.
+/**
+ * Sidebar Component
+ * @param {Object} props - Props passed to the component.
+ * @param {Function} props.onSelectComponent - Callback to set the selected component.
+ * @returns {JSX.Element} The Sidebar navigation component.
+ */
 const Sidebar = ({ onSelectComponent }) => {
     return (
         <Box 

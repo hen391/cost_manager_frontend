@@ -1,3 +1,8 @@
+// src/category_pie_chart.jsx
+/**
+ * Component for displaying a pie chart of costs by category.
+ * Fetches data from IndexedDB and visualizes it using Chart.js.
+ */
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -6,7 +11,11 @@ import { Box, Typography, FormControl, Select, MenuItem, InputLabel, Card } from
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const CategoryPieChart = () => {
+/**
+ * Category_pie_chart Component
+ * @returns {JSX.Element} A pie chart displaying costs by category.
+ */
+const Category_pie_chart = () => {
     const [chartData, setChartData] = useState({
         labels: [],
         datasets: [{
@@ -27,8 +36,9 @@ const CategoryPieChart = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
-// Fetches cost data from the database whenever the selected month or year changes.
-// Processes the data to calculate total expenses per category for the pie chart.
+    /**
+     * Fetches data and updates the pie chart when month or year changes.
+     */
     useEffect(() => {
         const fetchData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
@@ -212,4 +222,4 @@ const CategoryPieChart = () => {
     );
 };
 
-export default CategoryPieChart; 
+export default Category_pie_chart;

@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
-import AddCostForm from './components/AddCostForm';
-import CategoryPieChart from './components/CategoryPieChart';
-import Sidebar from './components/Sidebar';
-import MonthlyReport from './components/MonthlyReport';
-import EditExpenseForm from './components/EditExpenseForm';
+import Add_cost_form from './components/add_cost_form';
+import Category_pie_chart from './components/category_pie_chart';
+import Sidebar from './components/sidebar';
+import Monthly_report from './components/monthly_report';
+import Edit_expense_form from './components/edit_expense_form';
+// src/app.jsx
+/**
+ * Main application component.
+ */
 import { IconButton, Box } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-// Main application component
 function App() {
     const [selectedComponent, setSelectedComponent] = useState('AddCostForm');
+    /**
+     * Handles sidebar navigation by setting the selected component.
+     * @param {string} component - The name of the component to display.
+     */
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     const toggleSidebar = () => {
@@ -19,15 +26,15 @@ function App() {
     const renderComponent = () => {
         switch (selectedComponent) {
             case 'AddCostForm':
-                return <AddCostForm />;
+                return <Add_cost_form />;
             case 'CategoryPieChart':
-                return <CategoryPieChart />;
+                return <Category_pie_chart />;
             case 'MonthlyReport':
-                return <MonthlyReport />;
+                return <Monthly_report />;
             case 'EditExpenseForm':
-                return <EditExpenseForm />;
+                return <Edit_expense_form />;
             default:
-                return <AddCostForm />;
+                return <Add_cost_form />;
         }
     };
 
