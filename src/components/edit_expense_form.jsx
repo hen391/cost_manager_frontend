@@ -1,3 +1,8 @@
+// src/edit_expense_form.jsx
+/**
+ * Component for editing an existing cost entry.
+ * Provides a form to select and update an expense from the database.
+ */
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -32,7 +37,11 @@ const categoryColors = {
   Utilities: '#00BCD4'
 };
 
-function EditExpenseForm() {
+/**
+ * Edit_expense_form Component
+ * @returns {JSX.Element} A form to edit an existing cost entry.
+ */
+function Edit_expense_form() {
   const [form, setForm] = useState({
     id: '',
     sum: '',
@@ -45,6 +54,9 @@ function EditExpenseForm() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
+  /**
+   * Fetches all expenses from the database on component mount.
+   */
   useEffect(() => {
     const fetchExpenses = async () => {
       const allExpenses = await db.getCostsByMonthYear(selectedMonth, selectedYear);
@@ -53,10 +65,17 @@ function EditExpenseForm() {
     fetchExpenses();
   }, [selectedMonth, selectedYear]);
 
+  /**
+   * Handles form field changes.
+   * @param {Object} e - The event object.
+   */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  /**
+   * Submits the updated expense to the database.
+   */
   const handleEdit = async () => {
     if (!form.id || !form.sum || !form.category) {
       alert('יש לבחור הוצאה ולמלא סכום וקטגוריה לפני עריכה.');
@@ -341,4 +360,4 @@ function EditExpenseForm() {
   );
 }
 
-export default EditExpenseForm; 
+export default Edit_expense_form;

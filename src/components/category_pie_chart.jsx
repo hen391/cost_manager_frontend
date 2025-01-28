@@ -1,3 +1,8 @@
+// src/category_pie_chart.jsx
+/**
+ * Component for displaying a pie chart of costs by category.
+ * Fetches data from IndexedDB and visualizes it using Chart.js.
+ */
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -6,6 +11,10 @@ import { Box, Typography, FormControl, Select, MenuItem, InputLabel, Card } from
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+/**
+ * Category_pie_chart Component
+ * @returns {JSX.Element} A pie chart displaying costs by category.
+ */
 const CategoryPieChart = () => {
     const [chartData, setChartData] = useState({
         labels: [],
@@ -26,7 +35,9 @@ const CategoryPieChart = () => {
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
+    /**
+     * Fetches data and updates the pie chart when month or year changes.
+     */
     useEffect(() => {
         const fetchData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
@@ -69,12 +80,16 @@ const CategoryPieChart = () => {
         fetchData();
     }, [selectedMonth, selectedYear]);
 
+
+// Layout for selecting month and year and displaying the pie chart.
+// Includes Material-UI components and the Chart.js Pie chart.
+
     return (
         <Box sx={{ p: 4 }}>
-            <Typography 
-                variant="h4" 
-                align="center" 
-                sx={{ 
+            <Typography
+                variant="h4"
+                align="center"
+                sx={{
                     color: '#2c3e50',
                     fontWeight: 700,
                     mb: 4
@@ -83,9 +98,9 @@ const CategoryPieChart = () => {
                 Category Distribution
             </Typography>
 
-            <Box sx={{ 
-                display: 'flex', 
-                gap: 2, 
+            <Box sx={{
+                display: 'flex',
+                gap: 2,
                 mb: 4,
                 flexWrap: 'wrap',
                 justifyContent: 'center'
@@ -130,23 +145,23 @@ const CategoryPieChart = () => {
                 </FormControl>
             </Box>
 
-            <Card sx={{ 
-                maxWidth: '800px', 
+            <Card sx={{
+                maxWidth: '800px',
                 margin: '0 auto',
                 borderRadius: '16px',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
                 p: 4
             }}>
                 {chartData.labels.length > 0 ? (
-                    <Box sx={{ 
-                        width: '100%', 
+                    <Box sx={{
+                        width: '100%',
                         height: '400px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <Pie 
-                            data={chartData} 
+                        <Pie
+                            data={chartData}
                             options={{
                                 plugins: {
                                     legend: {
@@ -184,14 +199,14 @@ const CategoryPieChart = () => {
                                     duration: 1000,
                                     easing: 'easeInOutQuart'
                                 }
-                            }} 
+                            }}
                         />
                     </Box>
                 ) : (
-                    <Typography 
-                        variant="body1" 
-                        align="center" 
-                        sx={{ 
+                    <Typography
+                        variant="body1"
+                        align="center"
+                        sx={{
                             color: '#6b7280',
                             fontSize: '1.1rem',
                             py: 8
@@ -205,4 +220,4 @@ const CategoryPieChart = () => {
     );
 };
 
-export default CategoryPieChart; 
+export default CategoryPieChart;

@@ -1,3 +1,8 @@
+// src/add_cost_form.jsx
+/**
+ * Component for adding a new cost entry.
+ * Provides a form with fields for sum, category, description, and date.
+ */
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -17,7 +22,11 @@ import IDBWrapper from '../idb';
 
 const db = new IDBWrapper('CostManagerDB', 1);
 
-function AddCostForm() {
+/**
+ * Add_cost_form Component
+ * @returns {JSX.Element} A form to add new costs.
+ */
+function Add_cost_form() {
   const [form, setForm] = useState({
     sum: '',
     category: '',
@@ -25,16 +34,24 @@ function AddCostForm() {
     date: ''
   });
 
-  useEffect(() => {
+    // Automatically sets the current date when the component is loaded.
+    useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];
     setForm((prevForm) => ({ ...prevForm, date: currentDate }));
   }, []);
 
-  const handleChange = (e) => {
+    /**
+     * Handles input field changes.
+     * @param {Object} e - The event object.
+     */
+    const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async () => {
+    /**
+     * Submits the form and adds a new cost entry to the database.
+     */
+    const handleSubmit = async () => {
     if (!form.sum || !form.category) {
       alert('יש למלא סכום וקטגוריה לפני הוספה.');
       return;
@@ -42,16 +59,16 @@ function AddCostForm() {
 
     await db.addCost({ ...form, date: new Date(form.date) });
     alert('הוצאה נוספה בהצלחה!');
-    setForm({ sum: '', category: '', description: '', date: form.date }); 
+    setForm({ sum: '', category: '', description: '', date: form.date });
   };
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography 
-        variant="h4" 
-        align="center" 
+      <Typography
+        variant="h4"
+        align="center"
         gutterBottom
-        sx={{ 
+        sx={{
           color: '#2c3e50',
           fontWeight: 700,
           mb: 4
@@ -182,14 +199,14 @@ function AddCostForm() {
                 mb: 3
               }}
               InputLabelProps={{
-                shrink: true, 
+                shrink: true,
               }}
             />
 
             <Box display="flex" justifyContent="center">
-              <Button 
-                variant="contained" 
-                size="large" 
+              <Button
+                variant="contained"
+                size="large"
                 onClick={handleSubmit}
                 sx={{
                   borderRadius: '12px',
@@ -216,4 +233,4 @@ function AddCostForm() {
   );
 }
 
-export default AddCostForm;
+export default Add_cost_form;

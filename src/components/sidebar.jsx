@@ -1,30 +1,33 @@
-import React, { useState } from 'react';
+// src/sidebar.jsx
+/**
+ * Sidebar Component
+ * Provides navigation options to switch between different features of the application.
+ */
+import React from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import PieChartIcon from '@mui/icons-material/PieChart';
 import DescriptionIcon from '@mui/icons-material/Description';
 import EditIcon from '@mui/icons-material/Edit';
 
+/**
+ * Sidebar Component
+ * @param {Object} props - Props passed to the component.
+ * @param {Function} props.onSelectComponent - Callback to set the selected component.
+ * @returns {JSX.Element} The Sidebar navigation component.
+ */
 const Sidebar = ({ onSelectComponent }) => {
-    const [isOpen, setIsOpen] = useState(true);
-
-    const toggleSidebar = () => {
-        setIsOpen(!isOpen);
-    };
-
     return (
         <Box 
             sx={{ 
-                width: isOpen ? '280px' : '0',
+                width: '280px',
                 height: '100%',
-                overflow: 'hidden',
-                transition: 'width 0.3s ease',
                 background: 'rgba(255, 255, 255, 0.1)',
                 backdropFilter: 'blur(10px)',
                 borderRight: '1px solid rgba(255, 255, 255, 0.2)',
                 display: 'flex',
                 flexDirection: 'column',
-                padding: isOpen ? '32px 20px' : '0',
+                padding: '32px 20px',
                 gap: '24px'
             }}
         >
