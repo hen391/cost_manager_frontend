@@ -25,8 +25,13 @@ module.exports = {
     extensions: ['.js', '.jsx'],
   },
   devServer: {
-    static: './dist',
-    port: 3000,
+    static: {
+      directory: path.join(__dirname, 'dist'),
+    },
+    compress: true, // הפעלת דחיסה
+    port: 3000, // יציאת השרת
+    allowedHosts: 'all', // מאפשר גישה מכל כתובת
+    historyApiFallback: true, // לטיפול ב-SPA
   },
   mode: 'development',
 };
