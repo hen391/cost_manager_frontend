@@ -77,31 +77,34 @@ export default class IDBWrapper {
     }
 
     /**
-     * Retrieves all costs for a specific month and year from the database.
+     * Retrieves costs by month and year.
      * @param {number} month - The month (1-12).
      * @param {number} year - The year.
-     * @returns {Promise<Array>} - An array of matching cost entries.
+     * @returns {Promise<Array>} - A list of costs for the given month and year.
      */
     async getCostsByMonthYear(month, year) {
-      const db = await this.dbPromise;
-      const tx = db.transaction('costs', 'readonly');
-      const store = tx.objectStore('costs');
-      const costs = [];
-  
-      return new Promise((resolve) => {
-        store.openCursor().onsuccess = (event) => {
-          const cursor = event.target.result;
-          if (cursor) {
-            const costDate = new Date(cursor.value.date);
-            if (costDate.getFullYear() === year) {
-              costs.push(cursor.value);
-            }
-            cursor.continue();
-          } else {
-            resolve(costs);
-          }
-        };
-      });
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readonly');
+        const store = tx.objectStore('costs');
+        const costs = [];
+
+        return new Promise((resolve) => {
+            store.openCursor().onsuccess = (event) => {
+                const cursor = event.target.result;
+                if (cursor) {
+                    const costDate = new Date(cursor.value.date);
+                    if (
+                        costDate.getMonth() + 1 === month && // Adjust for zero-based months
+                        costDate.getFullYear() === year
+                    ) {
+                        costs.push(cursor.value);
+                    }
+                    cursor.continue();
+                } else {
+                    resolve(costs);
+                }
+            };
+        });
     }
 
 

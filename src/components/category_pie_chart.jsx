@@ -15,7 +15,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
  * Category_pie_chart Component
  * @returns {JSX.Element} A pie chart displaying costs by category.
  */
-const Category_pie_chart = () => {
+const CategoryPieChart = () => {
     const [chartData, setChartData] = useState({
         labels: [],
         datasets: [{
@@ -35,7 +35,6 @@ const Category_pie_chart = () => {
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
     /**
      * Fetches data and updates the pie chart when month or year changes.
      */
@@ -78,20 +77,19 @@ const Category_pie_chart = () => {
             });
         };
 
-// Retrieves and processes data from the IndexedDB to update the pie chart's data.
-// Calculates totals for each expense category.
         fetchData();
     }, [selectedMonth, selectedYear]);
+
 
 // Layout for selecting month and year and displaying the pie chart.
 // Includes Material-UI components and the Chart.js Pie chart.
 
     return (
         <Box sx={{ p: 4 }}>
-            <Typography 
-                variant="h4" 
-                align="center" 
-                sx={{ 
+            <Typography
+                variant="h4"
+                align="center"
+                sx={{
                     color: '#2c3e50',
                     fontWeight: 700,
                     mb: 4
@@ -100,9 +98,9 @@ const Category_pie_chart = () => {
                 Category Distribution
             </Typography>
 
-            <Box sx={{ 
-                display: 'flex', 
-                gap: 2, 
+            <Box sx={{
+                display: 'flex',
+                gap: 2,
                 mb: 4,
                 flexWrap: 'wrap',
                 justifyContent: 'center'
@@ -147,23 +145,23 @@ const Category_pie_chart = () => {
                 </FormControl>
             </Box>
 
-            <Card sx={{ 
-                maxWidth: '800px', 
+            <Card sx={{
+                maxWidth: '800px',
                 margin: '0 auto',
                 borderRadius: '16px',
                 boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
                 p: 4
             }}>
                 {chartData.labels.length > 0 ? (
-                    <Box sx={{ 
-                        width: '100%', 
+                    <Box sx={{
+                        width: '100%',
                         height: '400px',
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <Pie 
-                            data={chartData} 
+                        <Pie
+                            data={chartData}
                             options={{
                                 plugins: {
                                     legend: {
@@ -201,14 +199,14 @@ const Category_pie_chart = () => {
                                     duration: 1000,
                                     easing: 'easeInOutQuart'
                                 }
-                            }} 
+                            }}
                         />
                     </Box>
                 ) : (
-                    <Typography 
-                        variant="body1" 
-                        align="center" 
-                        sx={{ 
+                    <Typography
+                        variant="body1"
+                        align="center"
+                        sx={{
                             color: '#6b7280',
                             fontSize: '1.1rem',
                             py: 8
@@ -222,4 +220,4 @@ const Category_pie_chart = () => {
     );
 };
 
-export default Category_pie_chart;
+export default CategoryPieChart;
