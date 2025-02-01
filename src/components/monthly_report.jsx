@@ -24,7 +24,7 @@ const categoryColors = {
  * Monthly_report Component
  * @returns {JSX.Element} A component to display and export monthly reports.
  */
-const Monthly_report = () => {
+const MonthlyReport = () => {
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [reportData, setReportData] = useState([]);
@@ -269,4 +269,4 @@ const Monthly_report = () => {
     );
 };
 
-export default Monthly_report;
+export default MonthlyReport;

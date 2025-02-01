@@ -26,7 +26,7 @@ const db = new IDBWrapper('CostManagerDB', 1);
  * Add_cost_form Component
  * @returns {JSX.Element} A form to add new costs.
  */
-function Add_cost_form() {
+function AddCostForm() {
   const [form, setForm] = useState({
     sum: '',
     category: '',
@@ -233,4 +233,4 @@ function Add_cost_form() {
   );
 }
 
-export default Add_cost_form;
+export default AddCostForm;

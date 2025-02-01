@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import Add_cost_form from './components/add_cost_form';
-import Category_pie_chart from './components/category_pie_chart';
+import AddCostForm from './components/add_cost_form';
+import CategoryPieChart from './components/category_pie_chart';
 import Sidebar from './components/sidebar';
-import Monthly_report from './components/monthly_report';
-import Edit_expense_form from './components/edit_expense_form';
+import MonthlyReport from './components/monthly_report';
+import EditExpenseForm from './components/edit_expense_form';
 // src/app.jsx
 /**
  * Main application component.
@@ -26,15 +26,15 @@ function App() {
     const renderComponent = () => {
         switch (selectedComponent) {
             case 'AddCostForm':
-                return <Add_cost_form />;
+                return <AddCostForm />;
             case 'CategoryPieChart':
-                return <Category_pie_chart />;
+                return <CategoryPieChart />;
             case 'MonthlyReport':
-                return <Monthly_report />;
+                return <MonthlyReport />;
             case 'EditExpenseForm':
-                return <Edit_expense_form />;
+                return <EditExpenseForm />;
             default:
-                return <Add_cost_form />;
+                return <AddCostForm />;
         }
     };
 

@@ -38,10 +38,10 @@ const categoryColors = {
 };
 
 /**
- * Edit_expense_form Component
+ * EditExpenseForm Component
  * @returns {JSX.Element} A form to edit an existing cost entry.
  */
-function Edit_expense_form() {
+function EditExpenseForm() {
   const [form, setForm] = useState({
     id: '',
     sum: '',
@@ -360,4 +360,4 @@ function Edit_expense_form() {
   );
 }
 
-export default Edit_expense_form;
+export default EditExpenseForm;
