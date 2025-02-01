@@ -27,7 +27,7 @@ export default class IDBWrapper {
   
         request.onupgradeneeded = (event) => {
           const db = event.target.result;
-          // בודק אם לא קיימת חנות בשם 'costs'; אם לא קיימת, יוצרים אותה
+          // Checks if there is no store named 'costs'; if not, creates it
           if (!db.objectStoreNames.contains('costs')) {
             db.createObjectStore('costs', { keyPath: 'id', autoIncrement: true });
           }

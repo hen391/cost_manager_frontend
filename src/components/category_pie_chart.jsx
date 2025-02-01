@@ -2,6 +2,7 @@
 /**
  * Component for displaying a pie chart of costs by category.
  * Fetches data from IndexedDB and visualizes it using Chart.js.
+ * @module CategoryPieChart
  */
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
@@ -12,10 +13,37 @@ import { Box, Typography, FormControl, Select, MenuItem, InputLabel, Card } from
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 /**
- * Category_pie_chart Component
+ * @typedef {Object} ChartDataset
+ * @property {Array<number>} data - Array of numerical values for each category
+ * @property {Array<string>} backgroundColor - Array of colors for each category
+ * @property {string} borderColor - Color of the border between segments
+ * @property {number} borderWidth - Width of the border between segments
+ */
+
+/**
+ * @typedef {Object} ChartData
+ * @property {Array<string>} labels - Array of category labels
+ * @property {Array<ChartDataset>} datasets - Array of dataset objects
+ */
+
+/**
+ * @typedef {Object} CategoryTotals
+ * @property {number} [Food] - Total for food category
+ * @property {number} [Transportation] - Total for transportation category
+ * @property {number} [Entertainment] - Total for entertainment category
+ * @property {number} [Health] - Total for health category
+ * @property {number} [Education] - Total for education category
+ * @property {number} [Utilities] - Total for utilities category
+ */
+
+/**
+ * CategoryPieChart Component
+ * Provides a visual representation of expense distribution by category.
+ * Includes month/year selection and dynamic data updates.
  * @returns {JSX.Element} A pie chart displaying costs by category.
  */
 const CategoryPieChart = () => {
+    /** @type {[ChartData, Function]} Chart data state and setter */
     const [chartData, setChartData] = useState({
         labels: [],
         datasets: [{
@@ -33,15 +61,21 @@ const CategoryPieChart = () => {
         }]
     });
 
+    /** @type {[number, Function]} Selected month state and setter */
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    /** @type {[number, Function]} Selected year state and setter */
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
     /**
      * Fetches data and updates the pie chart when month or year changes.
+     * Calculates totals by category and updates chart data accordingly.
+     * @type {React.EffectCallback}
      */
     useEffect(() => {
         const fetchData = async () => {
             const idb = new IDBWrapper('CostManagerDB', 1);
             const costs = await idb.getCostsByMonthYear(selectedMonth, selectedYear);
+            
             if (costs.length === 0) {
                 setChartData({
                     labels: [],
@@ -54,6 +88,8 @@ const CategoryPieChart = () => {
                 });
                 return;
             }
+
+            /** @type {CategoryTotals} */
             const categoryTotals = costs.reduce((acc, cost) => {
                 acc[cost.category] = (acc[cost.category] || 0) + parseFloat(cost.sum || 0);
                 return acc;
@@ -79,7 +115,6 @@ const CategoryPieChart = () => {
 
         fetchData();
     }, [selectedMonth, selectedYear]);
-
 
 // Layout for selecting month and year and displaying the pie chart.
 // Includes Material-UI components and the Chart.js Pie chart.
@@ -217,7 +252,7 @@ const CategoryPieChart = () => {
                 )}
             </Card>
         </Box>
-    );
+    ); // Returns a container with month/year selectors and a pie chart showing expense distribution by category
 };
 
 export default CategoryPieChart;

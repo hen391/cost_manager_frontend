@@ -28,10 +28,10 @@ module.exports = {
     static: {
       directory: path.join(__dirname, 'dist'),
     },
-    compress: true, // הפעלת דחיסה
-    port: 3000, // יציאת השרת
-    allowedHosts: 'all', // מאפשר גישה מכל כתובת
-    historyApiFallback: true, // לטיפול ב-SPA
+    compress: true, // Enable compression
+    port: 3000, // Server port
+    allowedHosts: 'all', // Allow access from all addresses
+    historyApiFallback: true, // Handle SPA
   },
   mode: 'development',
 };

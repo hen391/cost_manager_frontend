@@ -127,7 +127,7 @@ const Sidebar = ({ onSelectComponent }) => {
                 Edit Expense
             </Button>
         </Box>
-    );
+    ); // Returns a navigation sidebar with buttons for Add Cost, Category Chart, and Monthly Report features
 };
 
 export default Sidebar;

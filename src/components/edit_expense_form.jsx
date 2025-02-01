@@ -2,6 +2,7 @@
 /**
  * Component for editing an existing cost entry.
  * Provides a form to select and update an expense from the database.
+ * @module EditExpenseForm
  */
 import React, { useState, useEffect } from 'react';
 import {
@@ -26,8 +27,26 @@ import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import EditIcon from '@mui/icons-material/Edit';
 import IDBWrapper from '../idb';
 
+// Initialize the database with a specific name and version
 const db = new IDBWrapper('CostManagerDB', 1);
 
+/**
+ * @typedef {Object} FormState
+ * @property {string} id - The ID of the selected expense
+ * @property {string} sum - The amount of the expense
+ * @property {string} category - The category of the expense
+ * @property {string} description - The description of the expense
+ * @property {string} date - The date of the expense
+ */
+
+/**
+ * @typedef {Object} ExpenseState
+ * @property {Array} expenses - List of all expenses
+ * @property {number} selectedMonth - Currently selected month (1-12)
+ * @property {number} selectedYear - Currently selected year
+ */
+
+// Define category colors for different expense categories
 const categoryColors = {
   Food: '#4CAF50',
   Transportation: '#2196F3',
@@ -39,9 +58,11 @@ const categoryColors = {
 
 /**
  * EditExpenseForm Component
+ * Provides interface for selecting and editing existing expenses.
  * @returns {JSX.Element} A form to edit an existing cost entry.
  */
 function EditExpenseForm() {
+  /** @type {[FormState, Function]} Form state and setter */
   const [form, setForm] = useState({
     id: '',
     sum: '',
@@ -50,12 +71,17 @@ function EditExpenseForm() {
     date: ''
   });
 
+  /** @type {[Array, Function]} Expenses list state and setter */
   const [expenses, setExpenses] = useState([]);
+  /** @type {[number, Function]} Selected month state and setter */
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+  /** @type {[number, Function]} Selected year state and setter */
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   /**
-   * Fetches all expenses from the database on component mount.
+   * Fetches all expenses from the database for the selected month and year.
+   * Updates the expenses state with the fetched data.
+   * @async
    */
   useEffect(() => {
     const fetchExpenses = async () => {
@@ -68,6 +94,8 @@ function EditExpenseForm() {
   /**
    * Handles form field changes.
    * @param {Object} e - The event object.
+   * @param {string} e.target.name - The name of the form field.
+   * @param {string} e.target.value - The new value of the form field.
    */
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -75,19 +103,26 @@ function EditExpenseForm() {
 
   /**
    * Submits the updated expense to the database.
+   * Validates required fields before submission.
+   * @async
    */
   const handleEdit = async () => {
     if (!form.id || !form.sum || !form.category) {
-      alert('יש לבחור הוצאה ולמלא סכום וקטגוריה לפני עריכה.');
+      alert('Please select an expense and fill in the amount and category before editing.');
       return;
     }
 
     const updatedExpense = { ...form, date: new Date(form.date) };
     await db.updateCost(updatedExpense);
-    alert('הוצאה נערכה בהצלחה!');
+    alert('Expense edited successfully!');
     setForm({ id: '', sum: '', category: '', description: '', date: '' });
   };
 
+  /**
+   * Handles the selection of an expense to edit.
+   * Updates the form state with the selected expense's details.
+   * @param {Object} event - The event object from the select component.
+   */
   const handleExpenseSelect = (event) => {
     const selectedExpense = expenses.find(expense => expense.id === event.target.value);
     if (selectedExpense) {
@@ -212,7 +247,7 @@ function EditExpenseForm() {
             {form.id && (
               <>
                 <TextField
-                  label="סכום"
+                  label="Amount"
                   name="sum"
                   value={form.sum}
                   onChange={handleChange}
@@ -238,7 +273,7 @@ function EditExpenseForm() {
                 />
 
                 <TextField
-                  label="קטגוריה"
+                  label="Category"
                   name="category"
                   value={form.category}
                   onChange={handleChange}
@@ -263,16 +298,16 @@ function EditExpenseForm() {
                     mb: 2
                   }}
                 >
-                  <MenuItem value="Food">אוכל</MenuItem>
-                  <MenuItem value="Transportation">תחבורה</MenuItem>
-                  <MenuItem value="Entertainment">בידור</MenuItem>
-                  <MenuItem value="Health">בריאות</MenuItem>
-                  <MenuItem value="Education">חינוך</MenuItem>
-                  <MenuItem value="Utilities">שירותים</MenuItem>
+                  <MenuItem value="Food">Food</MenuItem>
+                  <MenuItem value="Transportation">Transportation</MenuItem>
+                  <MenuItem value="Entertainment">Entertainment</MenuItem>
+                  <MenuItem value="Health">Health</MenuItem>
+                  <MenuItem value="Education">Education</MenuItem>
+                  <MenuItem value="Utilities">Utilities</MenuItem>
                 </TextField>
 
                 <TextField
-                  label="תיאור"
+                  label="Description"
                   name="description"
                   value={form.description}
                   onChange={handleChange}
@@ -298,7 +333,7 @@ function EditExpenseForm() {
                 />
 
                 <TextField
-                  label="תאריך"
+                  label="Date"
                   name="date"
                   type="date"
                   value={form.date}
@@ -348,7 +383,7 @@ function EditExpenseForm() {
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    שמור שינויים
+                    "Save Changes"
                   </Button>
                 </Box>
               </>
@@ -357,7 +392,7 @@ function EditExpenseForm() {
         </Paper>
       </Container>
     </Box>
-  );
+  ); // Returns a form with expense selector and editable fields for sum, category, description, and date to modify existing expenses
 }
 
 export default EditExpenseForm;

@@ -2,6 +2,7 @@
 /**
  * Component for generating and displaying monthly expense reports.
  * Provides options to filter expenses by month/year and export to CSV.
+ * @module MonthlyReport
  */
 import React, { useState, useEffect } from 'react';
 import IDBWrapper from '../idb';
@@ -11,6 +12,28 @@ import SearchIcon from '@mui/icons-material/Search';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { InputAdornment } from '@mui/material';
 
+/**
+ * @typedef {Object} ReportState
+ * @property {number} selectedMonth - Currently selected month (1-12)
+ * @property {number} selectedYear - Currently selected year
+ * @property {Array} reportData - Raw expense data
+ * @property {number} totalSum - Total sum of expenses
+ * @property {Object} categoryCounts - Count of expenses by category
+ * @property {string} searchTerm - Current search filter
+ * @property {Array} filteredData - Filtered expense data
+ */
+
+/**
+ * @typedef {Object} CategoryColors
+ * @property {string} Food - Color for food category
+ * @property {string} Transportation - Color for transportation category
+ * @property {string} Entertainment - Color for entertainment category
+ * @property {string} Health - Color for health category
+ * @property {string} Education - Color for education category
+ * @property {string} Utilities - Color for utilities category
+ */
+
+/** @type {CategoryColors} */
 const categoryColors = {
     Food: '#4CAF50',
     Transportation: '#2196F3',
@@ -21,20 +44,31 @@ const categoryColors = {
 };
 
 /**
- * Monthly_report Component
+ * MonthlyReport Component
+ * Provides interface for viewing and exporting monthly expense reports.
+ * Includes filtering, searching, and CSV export functionality.
  * @returns {JSX.Element} A component to display and export monthly reports.
  */
 const MonthlyReport = () => {
+    /** @type {[number, Function]} Selected month state and setter */
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    /** @type {[number, Function]} Selected year state and setter */
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    /** @type {[Array, Function]} Report data state and setter */
     const [reportData, setReportData] = useState([]);
+    /** @type {[number, Function]} Total sum state and setter */
     const [totalSum, setTotalSum] = useState(0);
+    /** @type {[Object, Function]} Category counts state and setter */
     const [categoryCounts, setCategoryCounts] = useState({});
+    /** @type {[string, Function]} Search term state and setter */
     const [searchTerm, setSearchTerm] = useState('');
+    /** @type {[Array, Function]} Filtered data state and setter */
     const [filteredData, setFilteredData] = useState([]);
 
     /**
      * Fetches expenses for the selected month and year.
+     * Updates report data, total sum, and category counts.
+     * @type {React.EffectCallback}
      */
     useEffect(() => {
         const fetchReportData = async () => {
@@ -55,7 +89,8 @@ const MonthlyReport = () => {
     }, [selectedMonth, selectedYear]);
 
     /**
-     * Filters expenses based on the search term.
+     * Filters expenses based on the search term using fuzzy search.
+     * @type {React.EffectCallback}
      */
     useEffect(() => {
         const fuse = new Fuse(reportData, {
@@ -68,6 +103,7 @@ const MonthlyReport = () => {
 
     /**
      * Exports the filtered expenses to a CSV file.
+     * Includes summary statistics and category counts.
      */
     const exportToCSV = () => {
         const csvRows = [
@@ -266,7 +302,7 @@ const MonthlyReport = () => {
                 </Typography>
             )}
         </Box>
-    );
+    ); // Returns a container with monthly expense report, including filters, search, expense cards, summary, and export option
 };
 
 export default MonthlyReport;

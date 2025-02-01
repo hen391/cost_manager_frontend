@@ -2,6 +2,7 @@
 /**
  * Component for adding a new cost entry.
  * Provides a form with fields for sum, category, description, and date.
+ * @module AddCostForm
  */
 import React, { useState, useEffect } from 'react';
 import {
@@ -23,10 +24,20 @@ import IDBWrapper from '../idb';
 const db = new IDBWrapper('CostManagerDB', 1);
 
 /**
- * Add_cost_form Component
+ * @typedef {Object} FormState
+ * @property {string} sum - The amount of the expense
+ * @property {string} category - The category of the expense
+ * @property {string} description - The description of the expense
+ * @property {string} date - The date of the expense
+ */
+
+/**
+ * AddCostForm Component
+ * Provides interface for adding new expenses to the database.
  * @returns {JSX.Element} A form to add new costs.
  */
 function AddCostForm() {
+  /** @type {[FormState, Function]} Form state and setter */
   const [form, setForm] = useState({
     sum: '',
     category: '',
@@ -34,31 +45,38 @@ function AddCostForm() {
     date: ''
   });
 
-    // Automatically sets the current date when the component is loaded.
-    useEffect(() => {
+  /**
+   * Sets the current date when the component is mounted.
+   * @type {React.EffectCallback}
+   */
+  useEffect(() => {
     const currentDate = new Date().toISOString().split('T')[0];
     setForm((prevForm) => ({ ...prevForm, date: currentDate }));
   }, []);
 
-    /**
-     * Handles input field changes.
-     * @param {Object} e - The event object.
-     */
-    const handleChange = (e) => {
+  /**
+   * Handles input field changes.
+   * @param {Object} e - The event object.
+   * @param {string} e.target.name - The name of the form field.
+   * @param {string} e.target.value - The new value of the form field.
+   */
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-    /**
-     * Submits the form and adds a new cost entry to the database.
-     */
-    const handleSubmit = async () => {
+  /**
+   * Submits the form and adds a new cost entry to the database.
+   * Validates required fields before submission.
+   * @async
+   */
+  const handleSubmit = async () => {
     if (!form.sum || !form.category) {
-      alert('יש למלא סכום וקטגוריה לפני הוספה.');
+      alert('Please fill in the amount and category before adding.');
       return;
     }
 
     await db.addCost({ ...form, date: new Date(form.date) });
-    alert('הוצאה נוספה בהצלחה!');
+    alert('Expense added successfully!');
     setForm({ sum: '', category: '', description: '', date: form.date });
   };
 
@@ -88,7 +106,7 @@ function AddCostForm() {
         >
           <form>
             <TextField
-              label="סכום"
+              label="Sum"
               name="sum"
               value={form.sum}
               onChange={handleChange}
@@ -114,7 +132,7 @@ function AddCostForm() {
             />
 
             <TextField
-              label="קטגוריה"
+              label="Category"
               name="category"
               value={form.category}
               onChange={handleChange}
@@ -139,16 +157,16 @@ function AddCostForm() {
                 mb: 2
               }}
             >
-              <MenuItem value="Food">אוכל</MenuItem>
-              <MenuItem value="Transportation">תחבורה</MenuItem>
-              <MenuItem value="Entertainment">בידור</MenuItem>
-              <MenuItem value="Health">בריאות</MenuItem>
-              <MenuItem value="Education">חינוך</MenuItem>
-              <MenuItem value="Utilities">שירותים</MenuItem>
+              <MenuItem value="Food">Food</MenuItem>
+              <MenuItem value="Transportation">Transportation</MenuItem>
+              <MenuItem value="Entertainment">Entertainment</MenuItem>
+              <MenuItem value="Health">Health</MenuItem>
+              <MenuItem value="Education">Education</MenuItem>
+              <MenuItem value="Utilities">Utilities</MenuItem>
             </TextField>
 
             <TextField
-              label="תיאור"
+              label="Description"
               name="description"
               value={form.description}
               onChange={handleChange}
@@ -174,7 +192,7 @@ function AddCostForm() {
             />
 
             <TextField
-              label="תאריך"
+              label="Date"
               name="date"
               type="date"
               value={form.date}
@@ -223,14 +241,14 @@ function AddCostForm() {
                   transition: 'all 0.3s ease'
                 }}
               >
-                הוסף הוצאה
+                Add Expense
               </Button>
             </Box>
           </form>
         </Paper>
       </Container>
     </Box>
-  );
+  ); // Returns a form with input fields for sum, category, description, and date to add new expenses
 }
 
 export default AddCostForm;
