@@ -9,8 +9,6 @@ The Cost Manager Frontend is a React-based web application that helps users trac
 - [Technologies Used](#technologies-used)
 - [Setup and Installation](#setup-and-installation)
 - [Usage Instructions](#usage-instructions)
-- [Project Structure](#project-structure)
-- [Deployment](#deployment)
 
 ---
 
@@ -77,45 +75,4 @@ Make sure you have the following installed on your machine:
 ### Edit an Expense
 1. Select the **Edit Expense** option from the sidebar.
 2. Choose an expense from the dropdown, modify the details, and click **Save Changes**.
-
----
-
-## Project Structure
-```
-cost_manager_frontend/
-├── dist/                        # Build output directory (auto-generated after running `npm run build`)
-│   ├── index.html               # Main HTML file for the React app
-│   └── bundle.js              
-├── src/
-│   ├── components/
-│   │   ├── add_cost_form.jsx         # Component for adding new cost entries
-│   │   ├── category_pie_chart.jsx    # Component for displaying category-wise pie chart
-│   │   ├── edit_expense_form.jsx     # Component for editing existing expenses
-│   │   ├── monthly_report.jsx        # Component for generating and exporting monthly reports
-│   │   ├── sidebar.jsx               # Sidebar navigation component
-│   ├── app.jsx                       # Main application component
-│   ├── idb.js                        # IndexedDB wrapper for database operations
-│   ├── index.js                      # Entry point for the React application
-├── package.json                     # Project configuration and dependencies
-├── package-lock.json                # Dependency tree lock file
-├── README.md                        # Documentation for the project
-├── .gitignore                       # Files and directories to ignore in Git
-├── node_modules/                    # Installed dependencies (auto-generated)
-```
-
----
-
-## Deployment
-
-### Steps to Deploy on Render.com
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-
-2. The build folder (`dist`) will be created. Deploy this folder on Render or another hosting service.
-
-3. Add the live deployment URL to the project documentation.
-
----
 
