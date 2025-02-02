@@ -1,7 +1,7 @@
 // src/edit_expense_form.jsx
 /**
- * Component for editing an existing cost entry.
- * Provides a form to select and update an expense from the database.
+ * Component for editing or deleting an existing cost entry.
+ * Provides a form to select and update/delete an expense from the database.
  * @module EditExpenseForm
  */
 import React, { useState, useEffect } from 'react';
@@ -18,13 +18,19 @@ import {
   InputLabel,
   InputAdornment,
   Card,
-  CardContent
+  CardContent,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@mui/material';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import CategoryIcon from '@mui/icons-material/Category';
 import DescriptionIcon from '@mui/icons-material/Description';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import IDBWrapper from '../idb';
 
 // Initialize the database with a specific name and version
@@ -77,6 +83,9 @@ function EditExpenseForm() {
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   /** @type {[number, Function]} Selected year state and setter */
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  /** @type {[boolean, Function]} Delete confirmation dialog state and setter */
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   /**
    * Fetches all expenses from the database for the selected month and year.
@@ -167,6 +176,62 @@ function EditExpenseForm() {
         description: selectedExpense.description,
         date: new Date(selectedExpense.date).toISOString().split('T')[0]
       });
+    }
+  };
+
+  /**
+   * Opens the delete confirmation dialog.
+   */
+  const handleOpenDeleteDialog = () => {
+    if (!form.id) {
+      alert('Please select an expense to delete');
+      return;
+    }
+    setOpenDeleteDialog(true);
+  };
+
+  /**
+   * Closes the delete confirmation dialog.
+   */
+  const handleCloseDeleteDialog = () => {
+    setOpenDeleteDialog(false);
+  };
+
+  /**
+   * Deletes the selected expense from the database.
+   * Performs several validations before allowing the deletion:
+   * 1. Checks if an expense is selected
+   * 2. Confirms deletion with user through dialog
+   * 3. Handles potential errors during deletion
+   * @async
+   */
+  const handleDelete = async () => {
+    try {
+      // Validate that an expense is selected
+      if (!form.id) {
+        alert('Please select an expense to delete');
+        return;
+      }
+
+      // Delete the expense from the database
+      await db.deleteCost(form.id);
+      
+      // Close the confirmation dialog
+      setOpenDeleteDialog(false);
+      
+      // Show success message
+      alert('Expense deleted successfully!');
+      
+      // Refresh the expenses list
+      const updatedExpenses = await db.getCostsByMonthYear(selectedMonth, selectedYear);
+      setExpenses(updatedExpenses);
+      
+      // Reset form after successful deletion
+      setForm({ id: '', sum: '', category: '', description: '', date: '' });
+    } catch (error) {
+      console.error('Error deleting expense:', error);
+      alert('Failed to delete expense. Please try again.');
+      setOpenDeleteDialog(false);
     }
   };
 
@@ -396,7 +461,7 @@ function EditExpenseForm() {
                   }}
                 />
 
-                <Box display="flex" justifyContent="center">
+                <Box display="flex" justifyContent="center" gap={2}>
                   <Button 
                     variant="contained" 
                     size="large" 
@@ -404,8 +469,8 @@ function EditExpenseForm() {
                     startIcon={<EditIcon />}
                     sx={{
                       borderRadius: '12px',
-                      padding: '12px 48px',
-                      fontSize: '1.1rem',
+                      padding: '8px 32px',
+                      fontSize: '1rem',
                       textTransform: 'none',
                       background: 'linear-gradient(45deg, #3b82f6 30%, #60a5fa 90%)',
                       boxShadow: '0 3px 15px rgba(59, 130, 246, 0.3)',
@@ -417,7 +482,30 @@ function EditExpenseForm() {
                       transition: 'all 0.3s ease'
                     }}
                   >
-                    "Save Changes"
+                    Save Changes
+                  </Button>
+
+                  <Button 
+                    variant="contained" 
+                    size="large" 
+                    onClick={handleOpenDeleteDialog}
+                    startIcon={<DeleteIcon />}
+                    sx={{
+                      borderRadius: '12px',
+                      padding: '8px 32px',
+                      fontSize: '1rem',
+                      textTransform: 'none',
+                      background: 'linear-gradient(45deg, #ef4444 30%, #f87171 90%)',
+                      boxShadow: '0 3px 15px rgba(239, 68, 68, 0.3)',
+                      '&:hover': {
+                        background: 'linear-gradient(45deg, #dc2626 30%, #ef4444 90%)',
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0 6px 20px rgba(239, 68, 68, 0.4)',
+                      },
+                      transition: 'all 0.3s ease'
+                    }}
+                  >
+                    Delete Expense
                   </Button>
                 </Box>
               </>
@@ -425,6 +513,44 @@ function EditExpenseForm() {
           </form>
         </Paper>
       </Container>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm Expense Deletion"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this expense? This action cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button 
+            onClick={handleCloseDeleteDialog}
+            sx={{ color: '#6b7280' }}
+          >
+            Cancel
+          </Button>
+          <Button 
+            onClick={handleDelete}
+            variant="contained"
+            sx={{
+              background: 'linear-gradient(45deg, #ef4444 30%, #f87171 90%)',
+              '&:hover': {
+                background: 'linear-gradient(45deg, #dc2626 30%, #ef4444 90%)',
+              }
+            }}
+            autoFocus
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   ); // Returns a form with expense selector and editable fields for sum, category, description, and date to modify existing expenses
 }

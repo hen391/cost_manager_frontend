@@ -132,5 +132,18 @@ export default class IDBWrapper {
         store.put(cost);
         return tx.complete;
     }
-  }
+
+    /**
+     * Deletes a cost entry from the database.
+     * @param {number|string} id - The ID of the cost entry to delete.
+     * @returns {Promise<void>} - Resolves when the deletion is complete.
+     */
+    async deleteCost(id) {
+        const db = await this.dbPromise;
+        const tx = db.transaction('costs', 'readwrite');
+        const store = tx.objectStore('costs');
+        await store.delete(id);
+        return tx.complete;
+    }
+}
   
