@@ -70,8 +70,24 @@ function AddCostForm() {
    * @async
    */
   const handleSubmit = async () => {
-    if (!form.sum || !form.category) {
-      alert('Please fill in the amount and category before adding.');
+    if (!form.sum) {
+      alert('Please fill in the sum before adding.');
+      return;
+    }
+    if(form.sum<=0){
+      alert('Sum must be greater than 0.');
+      return;
+    }
+    if (isNaN(form.sum) || form.sum.trim() === '') {
+      alert('Sum must be a valid number.');
+      return;
+    }
+    if(!form.category){
+      alert('Please select a category before adding.');
+      return;
+    }
+    if(!form.description){
+      alert('Please fill in the description before adding.');
       return;
     }
 

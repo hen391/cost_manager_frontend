@@ -182,8 +182,8 @@ const MonthlyReport = () => {
                             },
                         }}
                     >
-                        {[...Array(10).keys()].map((yearOffset) => {
-                            const year = new Date().getFullYear() - yearOffset;
+                        {[...Array(21).keys()].map((yearOffset) => {
+                            const year = 2030 - yearOffset;
                             return <MenuItem key={year} value={year}>{year}</MenuItem>;
                         })}
                     </Select>

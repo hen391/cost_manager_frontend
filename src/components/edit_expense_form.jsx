@@ -103,18 +103,52 @@ function EditExpenseForm() {
 
   /**
    * Submits the updated expense to the database.
-   * Validates required fields before submission.
+   * Performs several validations before allowing the submission:
+   * 1. Checks if all required fields are filled
+   * 2. Validates that the sum is a valid number
+   * 3. Ensures the sum is greater than 0
+   * 4. Verifies that description is not empty
    * @async
    */
   const handleEdit = async () => {
-    if (!form.id || !form.sum || !form.category) {
-      alert('Please select an expense and fill in the amount and category before editing.');
+    // Step 1: Validate that sum required 
+    if (!form.id || !form.sum) {
+      alert('Please fill in the sum before adding.');
       return;
     }
 
+    // Step 2: Validate that sum is a valid number
+    // Convert the sum to a number and check if it's valid
+    const numericSum = parseFloat(form.sum);
+    if (isNaN(numericSum)) {
+      alert('Amount must contain only numbers');
+      return;
+    }
+
+    // Step 3: Validate that sum is positive
+    // Ensure the amount is greater than 0
+    if (numericSum <= 0) {
+      alert('Amount must be greater than 0');
+      return;
+    }
+
+    // Step 4: Validate description
+    // Check if description exists and is not just whitespace
+    if (!form.description.trim()) {
+      alert('Description is required');
+      return;
+    }
+
+    // All validations passed, proceed with update
     const updatedExpense = { ...form, date: new Date(form.date) };
     await db.updateCost(updatedExpense);
-    alert('Expense edited successfully!');
+    alert('Expense updated successfully!');
+    
+    // Refresh the expenses list
+    const updatedExpenses = await db.getCostsByMonthYear(selectedMonth, selectedYear);
+    setExpenses(updatedExpenses);
+    
+    // Reset form after successful update
     setForm({ id: '', sum: '', category: '', description: '', date: '' });
   };
 
@@ -189,8 +223,8 @@ function EditExpenseForm() {
               },
             }}
           >
-            {[...Array(10).keys()].map((yearOffset) => {
-              const year = new Date().getFullYear() - yearOffset;
+            {[...Array(21).keys()].map((yearOffset) => {
+              const year = 2030 - yearOffset;
               return <MenuItem key={year} value={year}>{year}</MenuItem>;
             })}
           </Select>
@@ -247,7 +281,7 @@ function EditExpenseForm() {
             {form.id && (
               <>
                 <TextField
-                  label="Amount"
+                  label="Sum"
                   name="sum"
                   value={form.sum}
                   onChange={handleChange}
