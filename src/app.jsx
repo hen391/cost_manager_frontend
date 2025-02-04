@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import AddCostForm from './components/add_cost_form';
-import CategoryPieChart from './components/category_pie_chart';
-import Sidebar from './components/sidebar';
-import MonthlyReport from './components/monthly_report';
-import EditExpenseForm from './components/edit_expense_form';
-// src/app.jsx
+import { IconButton, Box } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import AddCostForm from './components/AddCostForm';
+import CategoryPieChart from './components/CategoryPieChart';
+import Sidebar from './components/Sidebar';
+import MonthlyReport from './components/MonthlyReport';
+import EditExpenseForm from './components/EditExpenseForm';
+
+// src/App.jsx
 /**
  * Main application component.
  */
-import { IconButton, Box } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 
 function App() {
     const [selectedComponent, setSelectedComponent] = useState('AddCostForm');
