@@ -1,4 +1,4 @@
-// src/edit_expense_form.jsx
+// src/components/EditExpenseForm.jsx
 /**
  * Component for editing or deleting an existing cost entry.
  * Provides a form to select and update/delete an expense from the database.
