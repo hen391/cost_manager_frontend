@@ -1,4 +1,4 @@
-// src/category_pie_chart.jsx
+// src/components/CategoryPieChart.jsx
 /**
  * Component for displaying a pie chart of costs by category.
  * Fetches data from IndexedDB and visualizes it using Chart.js.
@@ -42,7 +42,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
  * Includes month/year selection and dynamic data updates.
  * @returns {JSX.Element} A pie chart displaying costs by category.
  */
-const CategoryPieChart = () => {
+function CategoryPieChart() {
     /** @type {[ChartData, Function]} Chart data state and setter */
     const [chartData, setChartData] = useState({
         labels: [],
@@ -253,6 +253,6 @@ const CategoryPieChart = () => {
             </Card>
         </Box>
     ); // Returns a container with month/year selectors and a pie chart showing expense distribution by category
-};
+}
 
 export default CategoryPieChart;

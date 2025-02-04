@@ -1,4 +1,4 @@
-// src/add_cost_form.jsx
+// src/components/AddCostForm.jsx
 /**
  * Component for adding a new cost entry.
  * Provides a form with fields for sum, category, description, and date.

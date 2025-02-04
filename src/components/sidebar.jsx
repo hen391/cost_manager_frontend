@@ -1,4 +1,4 @@
-// src/sidebar.jsx
+// src/components/Sidebar.jsx
 /**
  * Sidebar Component
  * Provides navigation options to switch between different features of the application.
